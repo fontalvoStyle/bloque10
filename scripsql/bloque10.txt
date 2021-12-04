@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS public."Conexiones"
     PRIMARY KEY ("identificaciónUsuario1", "identificaciónUsuario2")
 );
 
-CREATE TABLE IF NOT EXISTS public."NielesB10"
+CREATE TABLE IF NOT EXISTS public."NivelesB10"
 (
     "idNivel" integer NOT NULL,
     nombre character varying NOT NULL,
@@ -259,7 +259,7 @@ ALTER TABLE public."Conexiones"
 
 ALTER TABLE public."Usuarios"
     ADD FOREIGN KEY ("idNivel")
-    REFERENCES public."NielesB10" ("idNivel")
+    REFERENCES public."NivelesB10" ("idNivel")
     NOT VALID;
 
 

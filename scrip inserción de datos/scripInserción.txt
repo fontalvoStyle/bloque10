@@ -1,0 +1,42 @@
+--jose
+--tabla de paises
+INSERT INTO "Paises"("idPaís","nombre") VALUES(1,'Colombia');
+INSERT INTO "Paises"("idPaís","nombre") VALUES(2,'Venezuela');
+INSERT INTO "Paises"("idPaís","nombre") VALUES(3,'Ecuador');
+INSERT INTO "Paises"("idPaís","nombre") VALUES(4,'Bolivia');
+--Tabla niveles b10
+INSERT INTO "NivelesB10"("idNivel","nombre") VALUES(1,'Tutor B10');
+INSERT INTO "NivelesB10"("idNivel","nombre") VALUES(2,'Innovador');
+INSERT INTO "NivelesB10"("idNivel","nombre") VALUES(3,'Integrador');
+INSERT INTO "NivelesB10"("idNivel","nombre") VALUES(4,'Explorador');
+--tabla de facultades
+INSERT INTO "Facultades" VALUES(1,'Ciencias empresariales y económicas');
+INSERT INTO "Facultades" VALUES(2,'Ingeniería');
+INSERT INTO "Facultades" VALUES(3,'Facultad de ciencias básicas');
+INSERT INTO "Facultades" VALUES(4,'Humanidades');
+INSERT INTO "Facultades" VALUES(5,'Ciencias de la salud');
+INSERT INTO "Facultades" VALUES(6,'Ciencias de la educación');
+
+--tabla de programas
+INSERT INTO "Programas" VALUES(1,'Administración de empresas',1);
+INSERT INTO "Programas" VALUES(2,'Ingeniería de sistemas',2);
+INSERT INTO "Programas" VALUES(3,'Biología',3);
+INSERT INTO "Programas" VALUES(4,'Antropología',4);
+INSERT INTO "Programas" VALUES(5,'Enfermería',5);
+INSERT INTO "Programas" VALUES(6,'Licenciatura en artes',6);
+--tabla tipos de privacidad
+INSERT INTO "TiposDePrivacidad" VALUES(1,'Público');
+INSERT INTO "TiposDePrivacidad" VALUES(2,'Privado');
+--tabla de grupos
+INSERT INTO "Grupos" VALUES(1,'Hablemos de calculo','si sabes cuanto es 1+1 entra',1);
+INSERT INTO "Grupos" VALUES(2,'Hablemos de salud','No vengan a decir cosas que no tienen que ver con ciencia',2);
+INSERT INTO "Grupos" VALUES(3,'Hablemos de naturaleza','somos los que somos y estamos los que estamos',1);
+INSERT INTO "Grupos" ("idGrupo","nombreGrupo","idPrivacidad")VALUES(4,'Hablemos de ciencia',2);
+--tabla tipos de likes
+INSERT INTO "TiposDeLike" VALUES(1,'Me gusta');
+INSERT INTO "TiposDeLike" VALUES(2,'Me divierte');
+INSERT INTO "TiposDeLike" VALUES(3,'Me enoja');
+--tabla cargos
+INSERT INTO "Cargos" VALUES(1,'Director centro de universidad');
+INSERT INTO "Cargos" VALUES(2,'Docente tiempo completo');
+INSERT INTO "Cargos" VALUES(3,'Docente ocasional');
