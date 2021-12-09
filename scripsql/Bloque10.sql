@@ -297,6 +297,48 @@ CREATE TABLE public."PublicacionesGrupales" (
 ALTER TABLE public."PublicacionesGrupales" OWNER TO postgres;
 
 --
+-- Name: Usuarios; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."Usuarios" (
+    "identificación" integer NOT NULL,
+    "primerNombre" character varying(45) NOT NULL,
+    "segundoNombre" character varying(45),
+    "primerApellido" character varying(45) NOT NULL,
+    "segundoApellido" character varying(45),
+    email character varying(100) NOT NULL,
+    password character varying(100) NOT NULL,
+    "biografía" text,
+    "fechaDeRegistro" date NOT NULL,
+    "idPaís" integer NOT NULL,
+    "idTipoDeUsuario" integer NOT NULL,
+    "idNivel" integer NOT NULL,
+    "idFotoDePerfil" integer,
+    "idFotoDePortada" integer
+);
+
+
+ALTER TABLE public."Usuarios" OWNER TO postgres;
+
+--
+-- Name: PublicacionesMarzoJulioPorAntropologos; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW public."PublicacionesMarzoJulioPorAntropologos" AS
+ SELECT "Publicaciones"."idPublicación" AS "Identificador",
+    "Publicaciones"."fechaDePublicación"
+   FROM public."Publicaciones"
+  WHERE ((date_part('month'::text, "Publicaciones"."fechaDePublicación") = ANY (ARRAY['3'::double precision, '4'::double precision, '5'::double precision, '6'::double precision, '7'::double precision])) AND ("Publicaciones"."identificaciónUsuario" IN ( SELECT "Usuarios"."identificación"
+           FROM (public."Estudiantes"
+             JOIN public."Usuarios" ON (("Estudiantes"."identificaciónUsuario" = "Usuarios"."identificación")))
+          WHERE (("Usuarios"."idNivel" = ( SELECT "NivelesB10"."idNivel"
+                   FROM public."NivelesB10"
+                  WHERE (("NivelesB10".nombre)::text = 'Integrador'::text))) AND ("Estudiantes"."idPrograma" = 4)))));
+
+
+ALTER TABLE public."PublicacionesMarzoJulioPorAntropologos" OWNER TO postgres;
+
+--
 -- Name: SeccionesCursos; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -371,30 +413,6 @@ CREATE TABLE public."TiposDeUsuarios" (
 
 
 ALTER TABLE public."TiposDeUsuarios" OWNER TO postgres;
-
---
--- Name: Usuarios; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."Usuarios" (
-    "identificación" integer NOT NULL,
-    "primerNombre" character varying(45) NOT NULL,
-    "segundoNombre" character varying(45),
-    "primerApellido" character varying(45) NOT NULL,
-    "segundoApellido" character varying(45),
-    email character varying(100) NOT NULL,
-    password character varying(100) NOT NULL,
-    "biografía" text,
-    "fechaDeRegistro" date NOT NULL,
-    "idPaís" integer NOT NULL,
-    "idTipoDeUsuario" integer NOT NULL,
-    "idNivel" integer NOT NULL,
-    "idFotoDePerfil" integer,
-    "idFotoDePortada" integer
-);
-
-
-ALTER TABLE public."Usuarios" OWNER TO postgres;
 
 --
 -- Name: comentarios; Type: TABLE; Schema: public; Owner: postgres
