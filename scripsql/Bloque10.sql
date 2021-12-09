@@ -209,8 +209,8 @@ ALTER TABLE public."Grupos Populares" OWNER TO postgres;
 --
 
 CREATE TABLE public."InscripcionesEnCursos" (
-    "idCurso" integer NOT NULL,
     "identificaciónUsuario" integer NOT NULL,
+    "idCurso" integer NOT NULL,
     "fechaDeIngreso" date NOT NULL,
     "idEstadoDeInscripción" integer NOT NULL
 );
@@ -677,6 +677,11 @@ INSERT INTO public."Cargos" ("idCargo", nombre) VALUES (3, 'Docente ocasional');
 -- Data for Name: CategoríasCursos; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
+INSERT INTO public."CategoríasCursos" ("idCategoríaCurso", "nombreCategoríaCurso") VALUES (40, 'ingenieria');
+INSERT INTO public."CategoríasCursos" ("idCategoríaCurso", "nombreCategoríaCurso") VALUES (41, 'psicologia');
+INSERT INTO public."CategoríasCursos" ("idCategoríaCurso", "nombreCategoríaCurso") VALUES (42, 'anatomia
+');
+INSERT INTO public."CategoríasCursos" ("idCategoríaCurso", "nombreCategoríaCurso") VALUES (43, 'programacion');
 
 
 --
@@ -703,6 +708,9 @@ INSERT INTO public."Dependencias" ("idDependencia", nombre) VALUES (1, 'VAC');
 -- Data for Name: EstadosDeInscripción; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
+INSERT INTO public."EstadosDeInscripción" ("idEstadoInscripción", nombre) VALUES (123, 'inscrito');
+INSERT INTO public."EstadosDeInscripción" ("idEstadoInscripción", nombre) VALUES (456, 'proceso');
+INSERT INTO public."EstadosDeInscripción" ("idEstadoInscripción", nombre) VALUES (101, 'finalizado');
 
 
 --
@@ -710,6 +718,11 @@ INSERT INTO public."Dependencias" ("idDependencia", nombre) VALUES (1, 'VAC');
 --
 
 INSERT INTO public."Estudiantes" ("identificaciónUsuario", "idPrograma") VALUES (1, 2);
+INSERT INTO public."Estudiantes" ("identificaciónUsuario", "idPrograma") VALUES (1001, 3);
+INSERT INTO public."Estudiantes" ("identificaciónUsuario", "idPrograma") VALUES (1002, 4);
+INSERT INTO public."Estudiantes" ("identificaciónUsuario", "idPrograma") VALUES (1003, 5);
+INSERT INTO public."Estudiantes" ("identificaciónUsuario", "idPrograma") VALUES (1004, 3);
+INSERT INTO public."Estudiantes" ("identificaciónUsuario", "idPrograma") VALUES (1005, 6);
 
 
 --
@@ -1189,7 +1202,7 @@ ALTER TABLE ONLY public."Grupos"
 --
 
 ALTER TABLE ONLY public."InscripcionesEnCursos"
-    ADD CONSTRAINT "InscripcionesEnCursos_pkey" PRIMARY KEY ("idCurso", "identificaciónUsuario");
+    ADD CONSTRAINT "InscripcionesEnCursos_pkey" PRIMARY KEY ("identificaciónUsuario", "idCurso");
 
 
 --
@@ -1425,30 +1438,6 @@ ALTER TABLE ONLY public."Grupos"
 
 
 --
--- Name: InscripcionesEnCursos InscripcionesEnCursos_idCurso_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."InscripcionesEnCursos"
-    ADD CONSTRAINT "InscripcionesEnCursos_idCurso_fkey" FOREIGN KEY ("idCurso") REFERENCES public."Cursos"("idCurso") NOT VALID;
-
-
---
--- Name: InscripcionesEnCursos InscripcionesEnCursos_idEstadoDeInscripción_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."InscripcionesEnCursos"
-    ADD CONSTRAINT "InscripcionesEnCursos_idEstadoDeInscripción_fkey" FOREIGN KEY ("idEstadoDeInscripción") REFERENCES public."EstadosDeInscripción"("idEstadoInscripción") NOT VALID;
-
-
---
--- Name: InscripcionesEnCursos InscripcionesEnCursos_identificaciónUsuario_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."InscripcionesEnCursos"
-    ADD CONSTRAINT "InscripcionesEnCursos_identificaciónUsuario_fkey" FOREIGN KEY ("identificaciónUsuario") REFERENCES public."Usuarios"("identificación") NOT VALID;
-
-
---
 -- Name: InscripcionesEnGrupos InscripcionesEnGrupos_idGrupo_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1585,11 +1574,35 @@ ALTER TABLE ONLY public."Usuarios"
 
 
 --
+-- Name: InscripcionesEnCursos fkCurso; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."InscripcionesEnCursos"
+    ADD CONSTRAINT "fkCurso" FOREIGN KEY ("idCurso") REFERENCES public."Cursos"("idCurso");
+
+
+--
+-- Name: InscripcionesEnCursos fkEstadoDeInscripcion; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."InscripcionesEnCursos"
+    ADD CONSTRAINT "fkEstadoDeInscripcion" FOREIGN KEY ("idEstadoDeInscripción") REFERENCES public."EstadosDeInscripción"("idEstadoInscripción");
+
+
+--
 -- Name: comentarios fkUsuario; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.comentarios
     ADD CONSTRAINT "fkUsuario" FOREIGN KEY ("identificaciónUsuario") REFERENCES public."Usuarios"("identificación");
+
+
+--
+-- Name: InscripcionesEnCursos fkestado; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."InscripcionesEnCursos"
+    ADD CONSTRAINT fkestado FOREIGN KEY ("idEstadoDeInscripción") REFERENCES public."EstadosDeInscripción"("idEstadoInscripción") NOT VALID;
 
 
 --
