@@ -15,7 +15,23 @@ COUNT(*) AS "Número de inscritos",
 DENSE_RANK() OVER(ORDER BY COUNT("Grupos"."idGrupo") DESC) AS "Puesto" 
 FROM "Grupos" LEFT JOIN "InscripcionesEnGrupos" ON "Grupos"."idGrupo" = "InscripcionesEnGrupos"."idGrupo"
 GROUP BY "Grupos"."idGrupo","Grupos"."nombreGrupo"
-ORDER BY "Grupos"."idGrupo"
+ORDER BY "Grupos"."idGrupo";
+
+CREATE VIEW "PublicacionesMarzoJulioPorAntropologos" AS
+SELECT "Publicaciones"."idPublicación" AS "Identificador",
+"Publicaciones"."fechaDePublicación"
+FROM "Publicaciones"
+WHERE EXTRACT(MONTH FROM "fechaDePublicación") IN ('03','04','05','06','07')
+AND "Publicaciones"."identificaciónUsuario" IN(SELECT "Usuarios"."identificación" 
+												FROM "Estudiantes" 
+												INNER JOIN "Usuarios" ON "Estudiantes"."identificaciónUsuario" = "Usuarios"."identificación"
+												WHERE "Usuarios"."idNivel" = (SELECT "idNivel" FROM "NivelesB10"
+																				WHERE nombre = 'Integrador')
+												AND "Estudiantes"."idPrograma" = 4);
+
+
+
+
 
 
 
