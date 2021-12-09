@@ -1,0 +1,23 @@
+CREATE VIEW Innovadores as 
+SELECT "Usuarios"."identificación",
+CONCAT("Usuarios"."primerNombre",' ',"Usuarios"."primerApellido") AS "Nombre y apellido",
+"Usuarios"."email"
+
+FROM "Usuarios" INNER JOIN "NivelesB10" ON "Usuarios"."idNivel" = "NivelesB10"."idNivel"
+WHERE "NivelesB10"."nombre" = 'Explorador' AND (EXTRACT(YEAR FROM "Usuarios"."fechaDeRegistro") < extract(year from NOW()));
+
+
+
+CREATE VIEW "Grupos Populares" AS
+SELECT "Grupos"."idGrupo" AS "Identificación del grupo",
+"Grupos"."nombreGrupo" AS "Nombre del grupo",
+COUNT(*) AS "Número de inscritos",
+DENSE_RANK() OVER(ORDER BY COUNT("Grupos"."idGrupo") DESC) AS "Puesto" 
+FROM "Grupos" LEFT JOIN "InscripcionesEnGrupos" ON "Grupos"."idGrupo" = "InscripcionesEnGrupos"."idGrupo"
+GROUP BY "Grupos"."idGrupo","Grupos"."nombreGrupo"
+ORDER BY "Grupos"."idGrupo"
+
+
+
+
+

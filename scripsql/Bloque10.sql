@@ -176,6 +176,35 @@ CREATE TABLE public."Grupos" (
 ALTER TABLE public."Grupos" OWNER TO postgres;
 
 --
+-- Name: InscripcionesEnGrupos; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."InscripcionesEnGrupos" (
+    "idGrupo" integer NOT NULL,
+    "identificaciónUsuario" integer NOT NULL
+);
+
+
+ALTER TABLE public."InscripcionesEnGrupos" OWNER TO postgres;
+
+--
+-- Name: Grupos Populares; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW public."Grupos Populares" AS
+ SELECT "Grupos"."idGrupo" AS "Identificación del grupo",
+    "Grupos"."nombreGrupo" AS "Nombre del grupo",
+    count(*) AS "Número de inscritos",
+    dense_rank() OVER (ORDER BY (count("Grupos"."idGrupo")) DESC) AS "Puesto"
+   FROM (public."Grupos"
+     LEFT JOIN public."InscripcionesEnGrupos" ON (("Grupos"."idGrupo" = "InscripcionesEnGrupos"."idGrupo")))
+  GROUP BY "Grupos"."idGrupo", "Grupos"."nombreGrupo"
+  ORDER BY "Grupos"."idGrupo";
+
+
+ALTER TABLE public."Grupos Populares" OWNER TO postgres;
+
+--
 -- Name: InscripcionesEnCursos; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -188,18 +217,6 @@ CREATE TABLE public."InscripcionesEnCursos" (
 
 
 ALTER TABLE public."InscripcionesEnCursos" OWNER TO postgres;
-
---
--- Name: InscripcionesEnGrupos; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."InscripcionesEnGrupos" (
-    "idGrupo" integer NOT NULL,
-    "identificaciónUsuario" integer NOT NULL
-);
-
-
-ALTER TABLE public."InscripcionesEnGrupos" OWNER TO postgres;
 
 --
 -- Name: Likes; Type: TABLE; Schema: public; Owner: postgres
@@ -393,6 +410,21 @@ CREATE TABLE public.comentarios (
 
 
 ALTER TABLE public.comentarios OWNER TO postgres;
+
+--
+-- Name: innovadores; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW public.innovadores AS
+ SELECT "Usuarios"."identificación",
+    concat("Usuarios"."primerNombre", ' ', "Usuarios"."primerApellido") AS "Nombre y apellido",
+    "Usuarios".email
+   FROM (public."Usuarios"
+     JOIN public."NivelesB10" ON (("Usuarios"."idNivel" = "NivelesB10"."idNivel")))
+  WHERE ((("NivelesB10".nombre)::text = 'Explorador'::text) AND (date_part('year'::text, "Usuarios"."fechaDeRegistro") < date_part('year'::text, now())));
+
+
+ALTER TABLE public.innovadores OWNER TO postgres;
 
 --
 -- Name: Álbumes; Type: TABLE; Schema: public; Owner: postgres
