@@ -29,6 +29,76 @@ AND "Publicaciones"."identificaciónUsuario" IN(SELECT "Usuarios"."identificaci�
 																				WHERE nombre = 'Integrador')
 												AND "Estudiantes"."idPrograma" = 4);
 
+CREATE OR REPLACE PROCEDURE 
+insertarGrupo(idGrupo Integer, nombreGrupo VARCHAR(100), descripción Text,idPrivacidad Integer,idUsuarioCreador Integer )
+AS
+$code$
+DECLARE
+privacidad "TiposDePrivacidad"%rowType;
+creador "Usuarios"%rowType;
+BEGIN
+	RAISE NOTICE 'Verficando la existencia del creador del grupo';
+	SELECT * INTO creador
+	FROM "Usuarios"
+	WHERE "identificación" = idUsuarioCreador;
+	
+	IF creador."identificación" IS NOT NULL THEN	
+			RAISE NOTICE 'Asignando la privacidad al grupo';
+			SELECT * INTO privacidad
+			FROM "TiposDePrivacidad"
+			WHERE "idTipoDePrivacidad" = idPrivacidad;
+			IF privacidad."idTipoDePrivacidad" IS NOT NULL THEN		
+					INSERT INTO "Grupos"
+					VALUES(idGrupo,nombreGrupo,descripción,idPrivacidad,idUsuarioCreador);
+					INSERT INTO "InscripcionesEnGrupos"
+					VALUES(idGrupo,idUsuarioCreador);
+					RAISE NOTICE 'El grupo se ha insertado correctamente';	
+			ELSE
+				RAISE NOTICE 'La privacidad que ha elegido no está disponible en la base de datos';	
+		    END IF;
+	ELSE
+		RAISE NOTICE 'El usuario que ha indicado como creador no se encuentra registrado en la base de datos';
+	END IF;
+END
+$code$
+Language 'plpgsql';
+
+
+
+CREATE OR REPLACE FUNCTION conexionesUsuarios(idUsuario INTEGER)
+RETURNS bigint 
+AS
+$BODY$
+DECLARE
+numConexiones bigint;
+BEGIN
+numConexiones:= (SELECT  COUNT(*)  
+				 FROM "Conexiones"
+				 WHERE "identificaciónUsuario1" = idUsuario
+				 GROUP BY "identificaciónUsuario1"); 
+return numConexiones;
+END;
+$BODY$
+language 'plpgsql';
+
+
+CREATE OR REPLACE FUNCTION facultad(idEstudiante INTEGER)
+RETURNS varchar(100)
+AS
+$BODY$
+DECLARE
+nombreFacultad varchar(100);
+BEGIN
+nombreFacultad:= (SELECT "nombre" FROM 
+					 "Facultades"
+					 WHERE "idFacultad" = (SELECT "idFacultad" FROM 
+											 "Programas" WHERE "idPrograma" =  (select "idPrograma" from "Estudiantes"
+																				WHERE "identificaciónUsuario" = idEstudiante))); 
+return nombreFacultad;
+END;
+$BODY$
+language 'plpgsql'
+
 
 
 

@@ -16,6 +16,88 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
+--
+-- Name: conexionesusuarios(integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.conexionesusuarios(idusuario integer) RETURNS bigint
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+numConexiones bigint;
+BEGIN
+numConexiones:= (SELECT  COUNT(*)  
+				 FROM "Conexiones"
+				 WHERE "identificaciónUsuario1" = idUsuario
+				 GROUP BY "identificaciónUsuario1"); 
+return numConexiones;
+END;
+$$;
+
+
+ALTER FUNCTION public.conexionesusuarios(idusuario integer) OWNER TO postgres;
+
+--
+-- Name: facultad(integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.facultad(idestudiante integer) RETURNS character varying
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+nombreFacultad varchar(100);
+BEGIN
+nombreFacultad:= (SELECT "nombre" FROM 
+					 "Facultades"
+					 WHERE "idFacultad" = (SELECT "idFacultad" FROM 
+											 "Programas" WHERE "idPrograma" =  (select "idPrograma" from "Estudiantes"
+																				WHERE "identificaciónUsuario" = idEstudiante))); 
+return nombreFacultad;
+END;
+$$;
+
+
+ALTER FUNCTION public.facultad(idestudiante integer) OWNER TO postgres;
+
+--
+-- Name: insertargrupo(integer, character varying, text, integer, integer); Type: PROCEDURE; Schema: public; Owner: postgres
+--
+
+CREATE PROCEDURE public.insertargrupo(idgrupo integer, nombregrupo character varying, "descripción" text, idprivacidad integer, idusuariocreador integer)
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+privacidad "TiposDePrivacidad"%rowType;
+creador "Usuarios"%rowType;
+BEGIN
+	RAISE NOTICE 'Verficando la existencia del creador del grupo';
+	SELECT * INTO creador
+	FROM "Usuarios"
+	WHERE "identificación" = idUsuarioCreador;
+	
+	IF creador."identificación" IS NOT NULL THEN	
+			RAISE NOTICE 'Asignando la privacidad al grupo';
+			SELECT * INTO privacidad
+			FROM "TiposDePrivacidad"
+			WHERE "idTipoDePrivacidad" = idPrivacidad;
+			IF privacidad."idTipoDePrivacidad" IS NOT NULL THEN		
+					INSERT INTO "Grupos"
+					VALUES(idGrupo,nombreGrupo,descripción,idPrivacidad,idUsuarioCreador);
+					INSERT INTO "InscripcionesEnGrupos"
+					VALUES(idGrupo,idUsuarioCreador);
+					RAISE NOTICE 'El grupo se ha insertado correctamente';	
+			ELSE
+				RAISE NOTICE 'La privacidad que ha elegido no está disponible en la base de datos';	
+		    END IF;
+	ELSE
+		RAISE NOTICE 'El usuario que ha indicado como creador no se encuentra registrado en la base de datos';
+	END IF;
+END
+$$;
+
+
+ALTER PROCEDURE public.insertargrupo(idgrupo integer, nombregrupo character varying, "descripción" text, idprivacidad integer, idusuariocreador integer) OWNER TO postgres;
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
