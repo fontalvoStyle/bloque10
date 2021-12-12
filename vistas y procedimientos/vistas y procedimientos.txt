@@ -97,7 +97,7 @@ nombreFacultad:= (SELECT "nombre" FROM
 return nombreFacultad;
 END;
 $BODY$
-language 'plpgsql'
+language 'plpgsql';
 
 
 

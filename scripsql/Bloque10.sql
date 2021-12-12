@@ -795,6 +795,17 @@ INSERT INTO public."Conexiones" ("identificaciónUsuario1", "identificaciónUsua
 -- Data for Name: Cursos; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
+INSERT INTO public."Cursos" ("idCurso", nombre, "descripción", costo, certificado, "idCategoríaCurso") VALUES (50, 'calculo diferencial', 'Es una parte del cálculo infinitesimal y del análisis matemático.', 200000, B'0', 40);
+INSERT INTO public."Cursos" ("idCurso", nombre, "descripción", costo, certificado, "idCategoríaCurso") VALUES (51, 'calculo integral', 'Una integral es una generalización de la suma de infinitos sumandos, infinitesimalmente pequeños', 250000, B'1', 40);
+INSERT INTO public."Cursos" ("idCurso", nombre, "descripción", costo, certificado, "idCategoríaCurso") VALUES (52, 'mecancia', 'Us la rama de la física que estudia y analiza el movimiento y reposo de los cuerpos', 0, B'1', 41);
+INSERT INTO public."Cursos" ("idCurso", nombre, "descripción", costo, certificado, "idCategoríaCurso") VALUES (53, 'electricidad y magnetismo', 'Son dos caras de una simple fuerza fundamental. ', 100000, B'0', 41);
+INSERT INTO public."Cursos" ("idCurso", nombre, "descripción", costo, certificado, "idCategoríaCurso") VALUES (54, 'futbol', 'Es un deporte de equipo jugado entre dos conjuntos de once jugadores cada uno y algunos árbitros que se ocupan de que las normas ', 0, B'0', 42);
+INSERT INTO public."Cursos" ("idCurso", nombre, "descripción", costo, certificado, "idCategoríaCurso") VALUES (55, 'Baloncesto', 'Es un deporte de equipo, jugado entre dos conjuntos de cinco jugadores cada uno durante cuatro períodos o cuartos de diez minutos cada uno​ ', 150000, B'1', 42);
+INSERT INTO public."Cursos" ("idCurso", nombre, "descripción", costo, certificado, "idCategoríaCurso") VALUES (56, 'Algoritmos y programacion ', 'Un algoritmo informático es un conjunto de instrucciones definidas, ordenadas y acotadas para resolver un problema', 0, B'0', 43);
+INSERT INTO public."Cursos" ("idCurso", nombre, "descripción", costo, certificado, "idCategoríaCurso") VALUES (57, 'Estructura I', 'La programación estructurada es un paradigma de programación orientado a mejorar la claridad, calidad y tiempo de desarrollo de un programa de computadora recurriendo únicamente a subrutinas y tres estructuras básica', 0, B'1', 43);
+INSERT INTO public."Cursos" ("idCurso", nombre, "descripción", costo, certificado, "idCategoríaCurso") VALUES (58, 'Calculo vectorial', 'Análisis vectorial o cálculo multivariable es un campo de las matemáticas referidas al análisis real multivariable de vectores en 2 o más dimensiones.', 0, B'1', 40);
+INSERT INTO public."Cursos" ("idCurso", nombre, "descripción", costo, certificado, "idCategoríaCurso") VALUES (59, 'atletismo', 'Es considerado el deporte organizado más antiguo del mundo. Abarca numerosas disciplinas agrupadas en carreras, saltos, lanzamientos y pruebas variadas.', 200000, B'0', 42);
+INSERT INTO public."Cursos" ("idCurso", nombre, "descripción", costo, certificado, "idCategoríaCurso") VALUES (60, 'estructura  II', 'es un paradigma de programación orientado a mejorar la claridad, calidad y tiempo de desarrollo de un programa utilizando únicamente subrutinas o funciones y tres estructuras', 250000, B'1', 41);
 
 
 --
@@ -811,6 +822,8 @@ INSERT INTO public."Dependencias" ("idDependencia", nombre) VALUES (1, 'VAC');
 INSERT INTO public."EstadosDeInscripción" ("idEstadoInscripción", nombre) VALUES (123, 'inscrito');
 INSERT INTO public."EstadosDeInscripción" ("idEstadoInscripción", nombre) VALUES (456, 'proceso');
 INSERT INTO public."EstadosDeInscripción" ("idEstadoInscripción", nombre) VALUES (101, 'finalizado');
+INSERT INTO public."EstadosDeInscripción" ("idEstadoInscripción", nombre) VALUES (11, 'inscrito');
+INSERT INTO public."EstadosDeInscripción" ("idEstadoInscripción", nombre) VALUES (13, 'finalizado');
 
 
 --
@@ -841,6 +854,11 @@ INSERT INTO public."Facultades" ("idFacultad", nombre) VALUES (6, 'Ciencias de l
 -- Data for Name: FotosPublicaciones; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
+INSERT INTO public."FotosPublicaciones" ("idArchivo", "idÁlbum") VALUES (1, 721);
+INSERT INTO public."FotosPublicaciones" ("idArchivo", "idÁlbum") VALUES (2, 821);
+INSERT INTO public."FotosPublicaciones" ("idArchivo", "idÁlbum") VALUES (3, 721);
+INSERT INTO public."FotosPublicaciones" ("idArchivo", "idÁlbum") VALUES (4, 921);
+INSERT INTO public."FotosPublicaciones" ("idArchivo", "idÁlbum") VALUES (5, 1021);
 
 
 --
@@ -857,6 +875,25 @@ INSERT INTO public."Grupos" ("idGrupo", "nombreGrupo", "descripción", "idPrivac
 -- Data for Name: InscripcionesEnCursos; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
+INSERT INTO public."InscripcionesEnCursos" ("identificaciónUsuario", "idCurso", "fechaDeIngreso", "idEstadoDeInscripción") VALUES (1, 50, '2021-06-06', 13);
+INSERT INTO public."InscripcionesEnCursos" ("identificaciónUsuario", "idCurso", "fechaDeIngreso", "idEstadoDeInscripción") VALUES (1, 60, '2021-09-15', 11);
+INSERT INTO public."InscripcionesEnCursos" ("identificaciónUsuario", "idCurso", "fechaDeIngreso", "idEstadoDeInscripción") VALUES (2, 54, '2021-02-12', 13);
+INSERT INTO public."InscripcionesEnCursos" ("identificaciónUsuario", "idCurso", "fechaDeIngreso", "idEstadoDeInscripción") VALUES (2, 55, '2021-10-06', 11);
+INSERT INTO public."InscripcionesEnCursos" ("identificaciónUsuario", "idCurso", "fechaDeIngreso", "idEstadoDeInscripción") VALUES (2, 59, '2021-09-09', 11);
+INSERT INTO public."InscripcionesEnCursos" ("identificaciónUsuario", "idCurso", "fechaDeIngreso", "idEstadoDeInscripción") VALUES (3, 59, '2021-10-06', 11);
+INSERT INTO public."InscripcionesEnCursos" ("identificaciónUsuario", "idCurso", "fechaDeIngreso", "idEstadoDeInscripción") VALUES (1001, 51, '2021-09-09', 11);
+INSERT INTO public."InscripcionesEnCursos" ("identificaciónUsuario", "idCurso", "fechaDeIngreso", "idEstadoDeInscripción") VALUES (1001, 56, '2021-12-12', 11);
+INSERT INTO public."InscripcionesEnCursos" ("identificaciónUsuario", "idCurso", "fechaDeIngreso", "idEstadoDeInscripción") VALUES (1001, 52, '2021-04-17', 13);
+INSERT INTO public."InscripcionesEnCursos" ("identificaciónUsuario", "idCurso", "fechaDeIngreso", "idEstadoDeInscripción") VALUES (1001, 54, '2021-05-25', 13);
+INSERT INTO public."InscripcionesEnCursos" ("identificaciónUsuario", "idCurso", "fechaDeIngreso", "idEstadoDeInscripción") VALUES (1002, 53, '2021-04-17', 13);
+INSERT INTO public."InscripcionesEnCursos" ("identificaciónUsuario", "idCurso", "fechaDeIngreso", "idEstadoDeInscripción") VALUES (1002, 57, '2021-08-20', 13);
+INSERT INTO public."InscripcionesEnCursos" ("identificaciónUsuario", "idCurso", "fechaDeIngreso", "idEstadoDeInscripción") VALUES (1003, 58, '2021-10-12', 13);
+INSERT INTO public."InscripcionesEnCursos" ("identificaciónUsuario", "idCurso", "fechaDeIngreso", "idEstadoDeInscripción") VALUES (1004, 60, '2021-10-14', 11);
+INSERT INTO public."InscripcionesEnCursos" ("identificaciónUsuario", "idCurso", "fechaDeIngreso", "idEstadoDeInscripción") VALUES (1004, 58, '2021-10-14', 11);
+INSERT INTO public."InscripcionesEnCursos" ("identificaciónUsuario", "idCurso", "fechaDeIngreso", "idEstadoDeInscripción") VALUES (1005, 51, '2021-11-05', 11);
+INSERT INTO public."InscripcionesEnCursos" ("identificaciónUsuario", "idCurso", "fechaDeIngreso", "idEstadoDeInscripción") VALUES (1005, 52, '2021-11-05', 11);
+INSERT INTO public."InscripcionesEnCursos" ("identificaciónUsuario", "idCurso", "fechaDeIngreso", "idEstadoDeInscripción") VALUES (1005, 57, '2021-02-26', 13);
+INSERT INTO public."InscripcionesEnCursos" ("identificaciónUsuario", "idCurso", "fechaDeIngreso", "idEstadoDeInscripción") VALUES (1005, 59, '2021-09-25', 11);
 
 
 --
@@ -874,6 +911,11 @@ INSERT INTO public."InscripcionesEnGrupos" ("idGrupo", "identificaciónUsuario")
 -- Data for Name: Likes; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
+INSERT INTO public."Likes" ("idPublicación", "identificaciónUsuario", fecha, "idTipoDeLike") VALUES (1, 3, '2020-12-04', 1);
+INSERT INTO public."Likes" ("idPublicación", "identificaciónUsuario", fecha, "idTipoDeLike") VALUES (2, 2, '2021-07-08', 1);
+INSERT INTO public."Likes" ("idPublicación", "identificaciónUsuario", fecha, "idTipoDeLike") VALUES (3, 2, '2021-11-09', 2);
+INSERT INTO public."Likes" ("idPublicación", "identificaciónUsuario", fecha, "idTipoDeLike") VALUES (4, 1, '2020-03-14', 1);
+INSERT INTO public."Likes" ("idPublicación", "identificaciónUsuario", fecha, "idTipoDeLike") VALUES (5, 3, '2020-01-30', 3);
 
 
 --
@@ -1135,18 +1177,168 @@ INSERT INTO public."Publicaciones" ("idPublicación", "descripción", "fechaDePu
 -- Data for Name: SeccionesCursos; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
+INSERT INTO public."SeccionesCursos" ("idSecciónCurso", "nombreSecciónCurso", "idCurso") VALUES (501, 'funsiones', 50);
+INSERT INTO public."SeccionesCursos" ("idSecciónCurso", "nombreSecciónCurso", "idCurso") VALUES (502, 'limites
+', 50);
+INSERT INTO public."SeccionesCursos" ("idSecciónCurso", "nombreSecciónCurso", "idCurso") VALUES (503, 'derivadas', 50);
+INSERT INTO public."SeccionesCursos" ("idSecciónCurso", "nombreSecciónCurso", "idCurso") VALUES (511, 'integrales', 51);
+INSERT INTO public."SeccionesCursos" ("idSecciónCurso", "nombreSecciónCurso", "idCurso") VALUES (512, 'integrales simples', 51);
+INSERT INTO public."SeccionesCursos" ("idSecciónCurso", "nombreSecciónCurso", "idCurso") VALUES (513, 'integrales por partes', 51);
+INSERT INTO public."SeccionesCursos" ("idSecciónCurso", "nombreSecciónCurso", "idCurso") VALUES (514, 'integrales trigonometricas', 51);
+INSERT INTO public."SeccionesCursos" ("idSecciónCurso", "nombreSecciónCurso", "idCurso") VALUES (515, 'aplicacion', 51);
+INSERT INTO public."SeccionesCursos" ("idSecciónCurso", "nombreSecciónCurso", "idCurso") VALUES (521, 'herramientas matematicas y vectores', 52);
+INSERT INTO public."SeccionesCursos" ("idSecciónCurso", "nombreSecciónCurso", "idCurso") VALUES (522, 'cinematica', 52);
+INSERT INTO public."SeccionesCursos" ("idSecciónCurso", "nombreSecciónCurso", "idCurso") VALUES (523, 'dinamica', 52);
+INSERT INTO public."SeccionesCursos" ("idSecciónCurso", "nombreSecciónCurso", "idCurso") VALUES (524, 'trabajo y energia', 52);
+INSERT INTO public."SeccionesCursos" ("idSecciónCurso", "nombreSecciónCurso", "idCurso") VALUES (532, 'fuerzas electricas y campos magneticos', 53);
+INSERT INTO public."SeccionesCursos" ("idSecciónCurso", "nombreSecciónCurso", "idCurso") VALUES (533, 'potencial electrico', 53);
+INSERT INTO public."SeccionesCursos" ("idSecciónCurso", "nombreSecciónCurso", "idCurso") VALUES (541, 'historia', 54);
+INSERT INTO public."SeccionesCursos" ("idSecciónCurso", "nombreSecciónCurso", "idCurso") VALUES (542, 'tacticas', 54);
+INSERT INTO public."SeccionesCursos" ("idSecciónCurso", "nombreSecciónCurso", "idCurso") VALUES (543, 'entrenamientos', 54);
+INSERT INTO public."SeccionesCursos" ("idSecciónCurso", "nombreSecciónCurso", "idCurso") VALUES (544, 'arbitros', 54);
+INSERT INTO public."SeccionesCursos" ("idSecciónCurso", "nombreSecciónCurso", "idCurso") VALUES (551, 'historia', 55);
+INSERT INTO public."SeccionesCursos" ("idSecciónCurso", "nombreSecciónCurso", "idCurso") VALUES (553, 'mejores entrenadores', 55);
+INSERT INTO public."SeccionesCursos" ("idSecciónCurso", "nombreSecciónCurso", "idCurso") VALUES (562, 'notacion de implementacion de algoritmos', 56);
+INSERT INTO public."SeccionesCursos" ("idSecciónCurso", "nombreSecciónCurso", "idCurso") VALUES (563, 'lenguaje de programacion', 56);
+INSERT INTO public."SeccionesCursos" ("idSecciónCurso", "nombreSecciónCurso", "idCurso") VALUES (564, 'condicionales', 56);
+INSERT INTO public."SeccionesCursos" ("idSecciónCurso", "nombreSecciónCurso", "idCurso") VALUES (565, 'ciclos', 56);
+INSERT INTO public."SeccionesCursos" ("idSecciónCurso", "nombreSecciónCurso", "idCurso") VALUES (566, 'vectores', 56);
+INSERT INTO public."SeccionesCursos" ("idSecciónCurso", "nombreSecciónCurso", "idCurso") VALUES (567, 'matriz', 56);
+INSERT INTO public."SeccionesCursos" ("idSecciónCurso", "nombreSecciónCurso", "idCurso") VALUES (571, 'funsiones
+', 57);
+INSERT INTO public."SeccionesCursos" ("idSecciónCurso", "nombreSecciónCurso", "idCurso") VALUES (572, 'punteros', 57);
+INSERT INTO public."SeccionesCursos" ("idSecciónCurso", "nombreSecciónCurso", "idCurso") VALUES (573, 'pilas
+', 57);
+INSERT INTO public."SeccionesCursos" ("idSecciónCurso", "nombreSecciónCurso", "idCurso") VALUES (574, 'colas
+', 57);
+INSERT INTO public."SeccionesCursos" ("idSecciónCurso", "nombreSecciónCurso", "idCurso") VALUES (575, 'listas
+', 57);
+INSERT INTO public."SeccionesCursos" ("idSecciónCurso", "nombreSecciónCurso", "idCurso") VALUES (581, 'curvas', 58);
+INSERT INTO public."SeccionesCursos" ("idSecciónCurso", "nombreSecciónCurso", "idCurso") VALUES (582, 'campos vectoriales', 58);
+INSERT INTO public."SeccionesCursos" ("idSecciónCurso", "nombreSecciónCurso", "idCurso") VALUES (584, 'derivadas parciales', 58);
+INSERT INTO public."SeccionesCursos" ("idSecciónCurso", "nombreSecciónCurso", "idCurso") VALUES (585, 'integrales multiples', 58);
+INSERT INTO public."SeccionesCursos" ("idSecciónCurso", "nombreSecciónCurso", "idCurso") VALUES (591, 'historia', 59);
+INSERT INTO public."SeccionesCursos" ("idSecciónCurso", "nombreSecciónCurso", "idCurso") VALUES (592, 'disciplinas', 59);
+INSERT INTO public."SeccionesCursos" ("idSecciónCurso", "nombreSecciónCurso", "idCurso") VALUES (601, 'arboles', 60);
+INSERT INTO public."SeccionesCursos" ("idSecciónCurso", "nombreSecciónCurso", "idCurso") VALUES (602, 'grafos', 60);
+INSERT INTO public."SeccionesCursos" ("idSecciónCurso", "nombreSecciónCurso", "idCurso") VALUES (552, 'reglamentos', 55);
+INSERT INTO public."SeccionesCursos" ("idSecciónCurso", "nombreSecciónCurso", "idCurso") VALUES (561, 'definicion de conceptos basicos', 56);
 
 
 --
 -- Data for Name: Seguidores; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
+INSERT INTO public."Seguidores" ("identificaciónSeguidor", "identificaciónSeguido") VALUES (1, 1);
+INSERT INTO public."Seguidores" ("identificaciónSeguidor", "identificaciónSeguido") VALUES (2, 2);
+INSERT INTO public."Seguidores" ("identificaciónSeguidor", "identificaciónSeguido") VALUES (3, 3);
 
 
 --
 -- Data for Name: TemasCursos; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5011, 'funcion polinomial', 501, 'es una relación que para cada valor de la entrada proporciona un valor que se calcula con un polinomio', 'url1');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5012, 'funcion inversa', 501, 'Es una función que asigna elementos de I en elementos de J', 'url2');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5013, 'funcion exponencial', 501, 'es un adjetivo que califica al tipo de crecimiento cuyo ritmo se incrementa cada vez más rápido', 'url3');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5014, 'funcion logaritmica', 501, 'es aquella que genéricamente se expresa como f (x) == logax', 'url4');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5015, 'funcion relacional', 501, 'está orientada al canal de comunicación entre el emisor y el receptor', 'url5');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5016, 'funcion trigonometrica', 501, 'las funciones trigonométricas son las funciones determinadas con el objetivo de extender la definición de las razones trigonométricas a todos los números reales y complejos', 'url6');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5021, 'definicion ', 502, 'el concepto de límite es la clave de toque que formaliza la noción intuitiva de aproximación hacia un punto concreto de una sucesión ', 'url7');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5022, 'limites laterales
+', 502, 'se refiere a uno de los dos límites de una función', 'url8');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5023, 'limites infinitos', 502, 'cuando la función f(x) llega a valores que crecen continuamente', 'url9');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5024, 'limites indeterminados', 502, 'Los límites indeterminados (o indeterminaciones) no indican que el límite no exista, sino que no se puede anticipar el resultado. ', 'url10');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5031, 'definicion y reglas blasicas', 503, 'definicion y reglas basicas para entender el tema.', 'url12');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5032, 'notacion', 503, 'lengueje simbolico de las dervadas', 'url13');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5033, 'calculo de la derivada', 503, 'implementacion de la derivada', 'url14');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5034, 'aplicaciones', 503, 'campo donde se puede aplicar', 'url15');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5111, 'historia', 511, 'conocer la historia del calculo integral.', 'url16');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5112, 'definicion', 511, 'entender el cocnepto del tema.', 'url17');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5121, 'contenido', 512, 'entender la introduccion de este metodo de integracion.', 'url18');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5131, 'introduccion y contenido', 513, 'aprender este metodo de integracion', 'url20');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5141, 'introduccion y contenido ', 514, 'conocer la definicion y todo lo relacionado con este tema', 'url22');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5142, 'ejemplos
+', 514, 'aplicar lo aprendido', 'url23');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5151, 'fisica', 515, 'Muchas leyes de la Física se expresan en forma de ecuaciones diferenciales.', 'url24');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5152, 'valor medio en una funcion', 515, 'Para calcular el valor medio m de una función f en un intervalo', 'url25');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5211, 'conceptos fundamentales
+', 521, 'comprender los conpetos fundamentales de la materia.', 'url26');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5212, 'operaciones con vectores', 521, 'Se expone el concepto de vector y las operaciones básicas entre dos vectores', 'url27');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5221, 'historia', 522, 'leer la interesante historia de esta materia', 'url29');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5222, 'terminologia', 522, 'entender la terminologia del tema', 'url30');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5223, 'elementos basicos
+', 522, 'entender los elementos basicos del tema', 'url31');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5224, 'registro de movimientos', 522, 'se entiende por movimiento al cambio de posición que experimenta un cuerpo en el espacio en un determinado período de tiempo', 'url32
+');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5225, 'tipos de movimientos', 522, 'diferencial los diferentes tipos de movimientos.', 'url33');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5231, 'historia', 523, 'entender la historias y como nace esta materia', 'url35');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5232, 'calculo en la dinamica', 523, 'se basa en el planteamiento de ecuaciones del movimiento y su integración', 'url36');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5233, 'dinamica sistemas
+', 523, 'en física existen dos tipos importantes de sistemas físicos: los sistemas finitos de partículas y los campos.', 'url37');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5412, 'origenes', 541, 'conocer el orirgen del deporte', 'url42');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5241, 'conceptos
+', 524, 'enetender los conceptos fundamentales.', 'url39');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5413, 'expancion internacional', 541, 'El auge del fútbol a nivel mundial motivó la creación de la FIFA el 21 de mayo de 1904. Las', 'url43');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5242, 'termodinamica', 524, 'enetender como funciona el trabajo y la energia.', 'url40');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5243, 'unidades de trabajo
+', 524, 'enetdner las unidades de trabajo con la que se trabajara en esta materia.', 'url41');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5321, 'historia', 532, 'comprender la historia del tema.', 'urle42');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5322, 'relacion entre H y B', 532, 'Para caracterizar H y B se ha recurrido a varias distinciones', 'url43');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5323, 'fuentes del campo', 532, 'Un campo magnético tiene dos fuentes que lo originan. Una de ellas es una corriente eléctrica de conducción, que da lugar a un campo magnético estático, si es constante.', 'url44');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5324, 'determinacion del campo', 532, 'Existen básicamente dos formas de determinar el valor del campo eléctrico.', 'url45');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5331, 'diferencial de potencial', 533, 'es una magnitud física que cuantifica la diferencia de potencial eléctrico entre dos puntos.', 'url46');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5411, 'historia', 541, 'La historia del fútbol se considera a partir de 1863, año de fundación de la Asociación Inglesa de Fútbol, aunque en sus orígenes eran, al igual que los demás códigos de fútbol, se remontan varios siglos en el pasado, particularmente en las islas británicas durante la Edad Media.​​', 'url41');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5421, 'lineas tacticas', 542, 'entender cuales son as lineas tacticas utilizadas en el futbol', 'url25');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5422, 'tacticas individuales', 542, 'son todas aquellas acciones que realiza y desarrolla un jugador de fútbol dominando el balón con todas las superficies de contacto que le permite el reglamento.', 'url45');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5423, 'tacticas defensivas', 542, 'Son los movimientos de retroceso que realizan los jugadores de un equipo que perdió la posesión del balón en su acción atacante', 'url46');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5424, 'tacticas ofensivas', 542, 'Las tácticas de fútbol ofensivo tienen como objetivo llevar el balón cerca de la portería contraria y lograr el mejor ángulo posible para marcar.', 'url47');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5431, 'entrenamiento', 543, 'El entrenamiento es cualquier preparación o adiestramiento con el propósito de mejorar el rendimiento físico o intelectual', 'ur48');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5432, 'tipos de entrenamientos', 543, 'saber  cuales son los entrenamientos nescesarios para el rendimiento adecuando de un futbolista profesional', 'url49');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5511, 'comienzos', 551, 'un profesor canadiense de educación física, inventó el baloncesto en 1891 en la YMCA de Springfield, Massachusetts, Estados Unidos', 'url50');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5512, 'primeras ligas', 551, 'conocer las primeras ligas de este deporte.', 'url51');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5521, 'manual de juego', 552, 'comprender como funciona este deporte', 'url52');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5531, 'estrategias de los mejores tecnicos', 553, 'saber cuales son las mejores estrategias de este deporte.', 'url53');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5611, 'definicion', 561, 'un algoritmo ​ es un conjunto de instrucciones', 'url54');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5612, 'conceptos basicos', 561, 'entender los conceptos basicos para entender el tema', 'url55');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5621, 'pseudocodigos', 562, 'En ciencias de la computación, y análisis numérico, el pseudocódigo​ es una descripción de alto nivel compacta e informal​ del principio operativo de un programa informático u otro algoritmo', 'url56');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5631, 'hstoria', 563, 'los tres primeros lenguajes de programación modernos, cuyos descendientes aún continúan siendo utilizados', 'url57');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5632, 'ranking', 563, 'los lenguajes de programacion con mejor calificacion y un poco de su historia', 'url58');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5633, 'definicion', 563, 'entende rla definicion de este concepto', 'url59');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5641, 'introduccion y definicion', 564, 'una sentencia condicional es una instrucción o grupo de instrucciones que se pueden ejecutar o no en función del valor de una condición', 'url60');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5651, 'introduccion y definicion', 565, 'es una secuencia de instrucciones de código que se ejecuta repetidas veces', 'url61');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5652, 'tipos de ciclos', 565, 'conocer cuales son los ciclos que se utilizan a la hora de programar y como usarlos', 'url62');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5923, 'carreras en vallas', 592, 'conocer las disciplinas del atletismo.', 'url84');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (2661, 'definicion y aplicacion practica', 566, 'una zona de almacenamiento contiguo que contiene una serie de elementos del mismo tipo', 'url63
+');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (2671, 'definicion y aplicacion practica', 567, 'una zona de almacenamiento contiguo que contiene una serie de elementos del mismo tipo', 'url64');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5711, 'definicion y aplicacion practica', 571, 'una función es una sección de un programa que calcula un valor de manera independiente al resto del programa', 'url65');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5721, 'definicion y aplicion practica', 572, 'un puntero es un objeto del lenguaje de programación, cuyo valor se refiere a otro valor almacenado en otra parte de la memoria del ordenador utilizando su dirección.', 'url66');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5722, 'listas viculadas', 572, 'es un tipo de dato autorreferenciado porque contienen un puntero ', 'url67');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5731, 'definicion y aplicacion practica', 573, 'es una lista ordenada o estructura de datos que permite almacenar y recuperar dato', 'url68');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5732, 'ventajas y desventajas', 573, 'comprender cuando es el mejor momento para usar las pilas', 'url69');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5741, 'definicion y aplicacion practica', 574, 'es una estructura de datos, caracterizada por ser una secuencia de elementos en la que la operación de inserción push se realiza por un extremo y la operación de extracción pull por el otro.', 'url70');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5742, 'ventajas y desventajas', 574, 'aprender a utilizar las colas en el momento indicado', 'url71');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5751, 'aplicacion practica y definicion', 575, 'es una estructura dinámica de datos que contiene una colección de elementos homogéneos (del mismo tipo) de manera que se establece entre ellos un orden.', 'url72');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5752, 'tipos de listas', 575, 'aprender cuantas y cuales son las listas que podemos utilizar.', 'url73');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5811, 'curvas en el espacio', 581, 'Se define como curvas planas a aquel conjunto de coordenadas (x,y)', 'url74');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5812, 'aplicaciones', 581, 'saber cuales son las aplicaciones del tema', 'url75');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5821, 'definicion y aplicacion practica', 582, 'es una función que asocia a cada punto del plano o del espacio un vector', 'url76');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5841, 'definicion y aplicacion practica', 584, 'la derivada parcial de una función de varias variables es la derivada con respecto a cada una de esas variables manteniendo las otras como constantes.', 'url77
+');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5842, 'derivadas parciales de orden superior', 584, 'En matemáticas, la derivada parcial de una función de varias variables es la derivada con respecto a cada una de esas variables manteniendo las otras como constantes.', 'url78');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5851, 'definicion y aplicacion practica', 585, 'La integración múltiple es el proceso de encontrar las primitivas de una función de varias variables respecto a todas las variables independientes que dicha función posea', 'url79');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5852, 'propiedades y metodos', 585, 'Existen seis órdenes posibles de integración para las integrales iteradas, dando todos el mismo resultado.', 'url80');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5911, 'historia del atletismo
+', 591, 'conocer la historia del atletismo', 'url81');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5921, 'carreras de velocidad de fondo', 592, 'conocer las disciplinas del atletismo.', 'url82');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (5922, 'carreras de media distancia y  en rutas', 592, 'conocer las disciplinas del atletismo.', 'url83');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (6011, 'definicion y terminologia', 601, 'En ciencias de la computación, un árbol binario es una estructura de datos en la cual cada nodo puede tener un hijo izquierdo y un hijo derecho.', 'url85');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (6012, 'dibujo y metodos', 601, 'conocer los metodos y la forma grafica de este tipo de estructuras', 'url86');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (6013, 'operaciones y aplicacion practica', 601, 'Como en toda estructura de datos hay dos operaciones básicas, inserción y eliminación. Inserción', 'url87');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (6021, 'definicion y aplicacion', 602, 'en el ámbito de las ciencias de la computación es un tipo abstracto de datos (TAD), que consiste en un conjunto de nodos (también llamados vértices) y un conjunto de arcos (aristas) que establecen relaciones entre los nodos.', 'url88');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (6022, 'enlaces', 602, 'la red de enlaces ferroviarios o aéreos o la red eléctrica de una ciudad', 'url89');
+INSERT INTO public."TemasCursos" ("idTema", "nombreTemaCurso", "idSección", "descripción", url) VALUES (6023, 'forma de representacion ', 602, 'conocer la forma en que se representan los grafos', 'url90');
 
 
 --
@@ -1193,12 +1385,22 @@ INSERT INTO public."Usuarios" ("identificación", "primerNombre", "segundoNombre
 -- Data for Name: comentarios; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
+INSERT INTO public.comentarios ("idComentario", "identificaciónUsuario", "idPublicación", fecha, comentario) VALUES (11, 2, 100, '2021-05-04', 'Un comentario es una apreciación o escrito sobre cualquier cosa puesta en análisis');
+INSERT INTO public.comentarios ("idComentario", "identificaciónUsuario", "idPublicación", fecha, comentario) VALUES (12, 1, 50, '2021-06-03', 'n comentario es una opinión, parecer, juicio o consideración que alguien hace acerca de otra persona o de algo. Dicha mención puede desarrollarse por vía');
+INSERT INTO public.comentarios ("idComentario", "identificaciónUsuario", "idPublicación", fecha, comentario) VALUES (13, 1, 51, '2020-12-20', 'Un comentario es una apreciación realizada por vía oral o escrita de algún objeto analizado, emitiendo en ello un juicio valorativo, lo que no es igual a una');
+INSERT INTO public.comentarios ("idComentario", "identificaciónUsuario", "idPublicación", fecha, comentario) VALUES (14, 3, 1, '2019-11-11', 'El comentario es un texto que tiene el propósito de presentar el texto comentado y explicarlo. En este sentido, el comentario de texto deb');
+INSERT INTO public.comentarios ("idComentario", "identificaciónUsuario", "idPublicación", fecha, comentario) VALUES (15, 1, 80, '2020-05-06', 'sinónimos de ''comentario'' en un diccionario de 200.000 sinónimos');
 
 
 --
 -- Data for Name: Álbumes; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
+INSERT INTO public."Álbumes" ("idÁlbum", "identificaciónUsuario", nombre, "fechaDeCreación") VALUES (721, 1, 'A1', '2020-12-08');
+INSERT INTO public."Álbumes" ("idÁlbum", "identificaciónUsuario", nombre, "fechaDeCreación") VALUES (821, 1, 'A2', '2021-05-25');
+INSERT INTO public."Álbumes" ("idÁlbum", "identificaciónUsuario", nombre, "fechaDeCreación") VALUES (921, 3, 'A3', '2021-01-01');
+INSERT INTO public."Álbumes" ("idÁlbum", "identificaciónUsuario", nombre, "fechaDeCreación") VALUES (9212, 2, 'A4', '2021-02-19');
+INSERT INTO public."Álbumes" ("idÁlbum", "identificaciónUsuario", nombre, "fechaDeCreación") VALUES (1021, 1, 'A4', '2020-12-12');
 
 
 --
