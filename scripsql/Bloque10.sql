@@ -176,7 +176,8 @@ CREATE TABLE public."Cursos" (
     "descripción" text NOT NULL,
     costo integer NOT NULL,
     certificado bit(1) NOT NULL,
-    "idCategoríaCurso" integer NOT NULL
+    "idCategoríaCurso" integer NOT NULL,
+    "fechaDePublicacion" date
 );
 
 
@@ -497,6 +498,43 @@ CREATE TABLE public."TiposDeUsuarios" (
 ALTER TABLE public."TiposDeUsuarios" OWNER TO postgres;
 
 --
+-- Name: VisitasPost; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."VisitasPost" (
+    "idPost" integer NOT NULL,
+    "idUsuario" integer NOT NULL,
+    "idVisitaPost" integer NOT NULL
+);
+
+
+ALTER TABLE public."VisitasPost" OWNER TO postgres;
+
+--
+-- Name: categorias; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.categorias (
+    "idCategoria" integer NOT NULL,
+    "nombreCategoria" character varying NOT NULL
+);
+
+
+ALTER TABLE public.categorias OWNER TO postgres;
+
+--
+-- Name: categoriasignadas; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.categoriasignadas (
+    "idPost" integer NOT NULL,
+    "idCategoria" integer NOT NULL
+);
+
+
+ALTER TABLE public.categoriasignadas OWNER TO postgres;
+
+--
 -- Name: comentarios; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -512,6 +550,109 @@ CREATE TABLE public.comentarios (
 ALTER TABLE public.comentarios OWNER TO postgres;
 
 --
+-- Name: cursosdeingenieria; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW public.cursosdeingenieria AS
+ SELECT "Cursos".nombre AS "Curso",
+    "Cursos"."descripción" AS "Descripción",
+    "Cursos".costo,
+    "Cursos".certificado,
+    "CategoríasCursos"."nombreCategoríaCurso" AS "Categoría",
+    "Cursos"."fechaDePublicacion" AS "Fecha de publicación"
+   FROM (public."Cursos"
+     JOIN public."CategoríasCursos" ON (("Cursos"."idCategoríaCurso" = "CategoríasCursos"."idCategoríaCurso")))
+  WHERE (("CategoríasCursos"."nombreCategoríaCurso")::text = 'ingenieria'::text);
+
+
+ALTER TABLE public.cursosdeingenieria OWNER TO postgres;
+
+--
+-- Name: cursosfinalizados; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW public.cursosfinalizados AS
+ SELECT count(*) AS "cantidad de estudiantes que termiaron un curso"
+   FROM (public."InscripcionesEnCursos"
+     JOIN public."EstadosDeInscripción" ON (("EstadosDeInscripción"."idEstadoInscripción" = "InscripcionesEnCursos"."idEstadoDeInscripción")))
+  WHERE ("EstadosDeInscripción"."idEstadoInscripción" = 13);
+
+
+ALTER TABLE public.cursosfinalizados OWNER TO postgres;
+
+--
+-- Name: datos_calculodiferencial; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW public.datos_calculodiferencial AS
+ SELECT "Usuarios"."primerNombre",
+    "Usuarios"."primerApellido"
+   FROM public."Usuarios"
+  WHERE ("Usuarios"."identificación" = ( SELECT "InscripcionesEnCursos"."identificaciónUsuario"
+           FROM public."InscripcionesEnCursos"
+          WHERE ("InscripcionesEnCursos"."idCurso" = ( SELECT "Cursos"."idCurso"
+                   FROM public."Cursos"
+                  WHERE ("Cursos"."idCurso" = 50)))));
+
+
+ALTER TABLE public.datos_calculodiferencial OWNER TO postgres;
+
+--
+-- Name: datosinscripcion; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW public.datosinscripcion AS
+ SELECT "Cursos".nombre,
+    "InscripcionesEnCursos"."fechaDeIngreso",
+    "Usuarios"."primerNombre",
+    "Usuarios"."primerApellido"
+   FROM ((public."InscripcionesEnCursos"
+     JOIN public."Usuarios" ON (("InscripcionesEnCursos"."identificaciónUsuario" = "Usuarios"."identificación")))
+     JOIN public."Cursos" ON (("Cursos"."idCurso" = "InscripcionesEnCursos"."idCurso")))
+  ORDER BY "InscripcionesEnCursos"."fechaDeIngreso";
+
+
+ALTER TABLE public.datosinscripcion OWNER TO postgres;
+
+--
+-- Name: estado; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.estado (
+    "idEstado" integer NOT NULL,
+    "idPost" integer NOT NULL,
+    "situación" text NOT NULL
+);
+
+
+ALTER TABLE public.estado OWNER TO postgres;
+
+--
+-- Name: etiquetas; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.etiquetas (
+    "idEtiqueta" integer NOT NULL,
+    "nombreEtiqueta" character varying NOT NULL,
+    "idUsuario" integer NOT NULL
+);
+
+
+ALTER TABLE public.etiquetas OWNER TO postgres;
+
+--
+-- Name: etiquetasignadas; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.etiquetasignadas (
+    "idPost" integer NOT NULL,
+    "idEtiqueta" integer NOT NULL
+);
+
+
+ALTER TABLE public.etiquetasignadas OWNER TO postgres;
+
+--
 -- Name: innovadores; Type: VIEW; Schema: public; Owner: postgres
 --
 
@@ -525,6 +666,71 @@ CREATE VIEW public.innovadores AS
 
 
 ALTER TABLE public.innovadores OWNER TO postgres;
+
+--
+-- Name: post; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.post (
+    "idPost" integer NOT NULL,
+    titulo character varying(200) NOT NULL,
+    contenido text NOT NULL,
+    "fechaCreacion" date NOT NULL,
+    "imgDest" text NOT NULL,
+    "idUsuario" integer NOT NULL
+);
+
+
+ALTER TABLE public.post OWNER TO postgres;
+
+--
+-- Name: publicacionerecientes; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW public.publicacionerecientes AS
+ SELECT "Cursos"."idCurso",
+    "Cursos".nombre,
+    "Cursos"."descripción",
+    "Cursos".costo,
+    "Cursos".certificado,
+    "Cursos"."idCategoríaCurso",
+    "Cursos"."fechaDePublicacion"
+   FROM public."Cursos"
+  WHERE (("Cursos"."fechaDePublicacion" >= ((to_char(now(), 'YYYY-MM-DD'::text))::date - 7)) AND ("Cursos"."fechaDePublicacion" <= (to_char(now(), 'YYYY-MM-DD'::text))::date));
+
+
+ALTER TABLE public.publicacionerecientes OWNER TO postgres;
+
+--
+-- Name: publicacionesPost; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."publicacionesPost" (
+    "idPost" integer NOT NULL,
+    "idPublicación" integer NOT NULL
+);
+
+
+ALTER TABLE public."publicacionesPost" OWNER TO postgres;
+
+--
+-- Name: tipodelikemasusado; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW public.tipodelikemasusado AS
+ SELECT "TiposDeLike"."nombreTipoDeLike" AS "Tipo de like",
+    "CantidadTipoDeLike"."Cantidad de usos"
+   FROM (( SELECT "Likes"."idTipoDeLike" AS "id tipo de like",
+            count(*) AS "Cantidad de usos",
+            dense_rank() OVER (ORDER BY (count(*)) DESC) AS "Puesto"
+           FROM public."Likes"
+          GROUP BY "Likes"."idTipoDeLike"
+          ORDER BY (count(*)) DESC) "CantidadTipoDeLike"
+     JOIN public."TiposDeLike" ON (("CantidadTipoDeLike"."id tipo de like" = "TiposDeLike"."idTipoDeLike")))
+  WHERE ("CantidadTipoDeLike"."Puesto" = 1);
+
+
+ALTER TABLE public.tipodelikemasusado OWNER TO postgres;
 
 --
 -- Name: Álbumes; Type: TABLE; Schema: public; Owner: postgres
@@ -795,17 +1001,17 @@ INSERT INTO public."Conexiones" ("identificaciónUsuario1", "identificaciónUsua
 -- Data for Name: Cursos; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public."Cursos" ("idCurso", nombre, "descripción", costo, certificado, "idCategoríaCurso") VALUES (50, 'calculo diferencial', 'Es una parte del cálculo infinitesimal y del análisis matemático.', 200000, B'0', 40);
-INSERT INTO public."Cursos" ("idCurso", nombre, "descripción", costo, certificado, "idCategoríaCurso") VALUES (51, 'calculo integral', 'Una integral es una generalización de la suma de infinitos sumandos, infinitesimalmente pequeños', 250000, B'1', 40);
-INSERT INTO public."Cursos" ("idCurso", nombre, "descripción", costo, certificado, "idCategoríaCurso") VALUES (52, 'mecancia', 'Us la rama de la física que estudia y analiza el movimiento y reposo de los cuerpos', 0, B'1', 41);
-INSERT INTO public."Cursos" ("idCurso", nombre, "descripción", costo, certificado, "idCategoríaCurso") VALUES (53, 'electricidad y magnetismo', 'Son dos caras de una simple fuerza fundamental. ', 100000, B'0', 41);
-INSERT INTO public."Cursos" ("idCurso", nombre, "descripción", costo, certificado, "idCategoríaCurso") VALUES (54, 'futbol', 'Es un deporte de equipo jugado entre dos conjuntos de once jugadores cada uno y algunos árbitros que se ocupan de que las normas ', 0, B'0', 42);
-INSERT INTO public."Cursos" ("idCurso", nombre, "descripción", costo, certificado, "idCategoríaCurso") VALUES (55, 'Baloncesto', 'Es un deporte de equipo, jugado entre dos conjuntos de cinco jugadores cada uno durante cuatro períodos o cuartos de diez minutos cada uno​ ', 150000, B'1', 42);
-INSERT INTO public."Cursos" ("idCurso", nombre, "descripción", costo, certificado, "idCategoríaCurso") VALUES (56, 'Algoritmos y programacion ', 'Un algoritmo informático es un conjunto de instrucciones definidas, ordenadas y acotadas para resolver un problema', 0, B'0', 43);
-INSERT INTO public."Cursos" ("idCurso", nombre, "descripción", costo, certificado, "idCategoríaCurso") VALUES (57, 'Estructura I', 'La programación estructurada es un paradigma de programación orientado a mejorar la claridad, calidad y tiempo de desarrollo de un programa de computadora recurriendo únicamente a subrutinas y tres estructuras básica', 0, B'1', 43);
-INSERT INTO public."Cursos" ("idCurso", nombre, "descripción", costo, certificado, "idCategoríaCurso") VALUES (58, 'Calculo vectorial', 'Análisis vectorial o cálculo multivariable es un campo de las matemáticas referidas al análisis real multivariable de vectores en 2 o más dimensiones.', 0, B'1', 40);
-INSERT INTO public."Cursos" ("idCurso", nombre, "descripción", costo, certificado, "idCategoríaCurso") VALUES (59, 'atletismo', 'Es considerado el deporte organizado más antiguo del mundo. Abarca numerosas disciplinas agrupadas en carreras, saltos, lanzamientos y pruebas variadas.', 200000, B'0', 42);
-INSERT INTO public."Cursos" ("idCurso", nombre, "descripción", costo, certificado, "idCategoríaCurso") VALUES (60, 'estructura  II', 'es un paradigma de programación orientado a mejorar la claridad, calidad y tiempo de desarrollo de un programa utilizando únicamente subrutinas o funciones y tres estructuras', 250000, B'1', 41);
+INSERT INTO public."Cursos" ("idCurso", nombre, "descripción", costo, certificado, "idCategoríaCurso", "fechaDePublicacion") VALUES (50, 'calculo diferencial', 'Es una parte del cálculo infinitesimal y del análisis matemático.', 200000, B'0', 40, '2021-06-06');
+INSERT INTO public."Cursos" ("idCurso", nombre, "descripción", costo, certificado, "idCategoríaCurso", "fechaDePublicacion") VALUES (51, 'calculo integral', 'Una integral es una generalización de la suma de infinitos sumandos, infinitesimalmente pequeños', 250000, B'1', 40, '2021-09-09');
+INSERT INTO public."Cursos" ("idCurso", nombre, "descripción", costo, certificado, "idCategoríaCurso", "fechaDePublicacion") VALUES (52, 'mecancia', 'Us la rama de la física que estudia y analiza el movimiento y reposo de los cuerpos', 0, B'1', 41, '2021-04-17');
+INSERT INTO public."Cursos" ("idCurso", nombre, "descripción", costo, certificado, "idCategoríaCurso", "fechaDePublicacion") VALUES (53, 'electricidad y magnetismo', 'Son dos caras de una simple fuerza fundamental. ', 100000, B'0', 41, '2021-04-17');
+INSERT INTO public."Cursos" ("idCurso", nombre, "descripción", costo, certificado, "idCategoríaCurso", "fechaDePublicacion") VALUES (54, 'futbol', 'Es un deporte de equipo jugado entre dos conjuntos de once jugadores cada uno y algunos árbitros que se ocupan de que las normas ', 0, B'0', 42, '2021-02-12');
+INSERT INTO public."Cursos" ("idCurso", nombre, "descripción", costo, certificado, "idCategoríaCurso", "fechaDePublicacion") VALUES (55, 'Baloncesto', 'Es un deporte de equipo, jugado entre dos conjuntos de cinco jugadores cada uno durante cuatro períodos o cuartos de diez minutos cada uno​ ', 150000, B'1', 42, '2021-10-06');
+INSERT INTO public."Cursos" ("idCurso", nombre, "descripción", costo, certificado, "idCategoríaCurso", "fechaDePublicacion") VALUES (56, 'Algoritmos y programacion ', 'Un algoritmo informático es un conjunto de instrucciones definidas, ordenadas y acotadas para resolver un problema', 0, B'0', 43, '2021-12-12');
+INSERT INTO public."Cursos" ("idCurso", nombre, "descripción", costo, certificado, "idCategoríaCurso", "fechaDePublicacion") VALUES (57, 'Estructura I', 'La programación estructurada es un paradigma de programación orientado a mejorar la claridad, calidad y tiempo de desarrollo de un programa de computadora recurriendo únicamente a subrutinas y tres estructuras básica', 0, B'1', 43, '2021-02-26');
+INSERT INTO public."Cursos" ("idCurso", nombre, "descripción", costo, certificado, "idCategoríaCurso", "fechaDePublicacion") VALUES (58, 'Calculo vectorial', 'Análisis vectorial o cálculo multivariable es un campo de las matemáticas referidas al análisis real multivariable de vectores en 2 o más dimensiones.', 0, B'1', 40, '2021-10-12');
+INSERT INTO public."Cursos" ("idCurso", nombre, "descripción", costo, certificado, "idCategoríaCurso", "fechaDePublicacion") VALUES (59, 'atletismo', 'Es considerado el deporte organizado más antiguo del mundo. Abarca numerosas disciplinas agrupadas en carreras, saltos, lanzamientos y pruebas variadas.', 200000, B'0', 42, '2021-09-09');
+INSERT INTO public."Cursos" ("idCurso", nombre, "descripción", costo, certificado, "idCategoríaCurso", "fechaDePublicacion") VALUES (60, 'estructura  II', 'es un paradigma de programación orientado a mejorar la claridad, calidad y tiempo de desarrollo de un programa utilizando únicamente subrutinas o funciones y tres estructuras', 250000, B'1', 41, '2021-09-15');
 
 
 --
@@ -1382,6 +1588,64 @@ INSERT INTO public."Usuarios" ("identificación", "primerNombre", "segundoNombre
 
 
 --
+-- Data for Name: VisitasPost; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO public."VisitasPost" ("idPost", "idUsuario", "idVisitaPost") VALUES (1, 2, 1);
+INSERT INTO public."VisitasPost" ("idPost", "idUsuario", "idVisitaPost") VALUES (1, 3, 2);
+INSERT INTO public."VisitasPost" ("idPost", "idUsuario", "idVisitaPost") VALUES (1, 1001, 3);
+INSERT INTO public."VisitasPost" ("idPost", "idUsuario", "idVisitaPost") VALUES (1, 1002, 4);
+INSERT INTO public."VisitasPost" ("idPost", "idUsuario", "idVisitaPost") VALUES (1, 1003, 5);
+INSERT INTO public."VisitasPost" ("idPost", "idUsuario", "idVisitaPost") VALUES (1, 1004, 6);
+INSERT INTO public."VisitasPost" ("idPost", "idUsuario", "idVisitaPost") VALUES (1, 1005, 7);
+INSERT INTO public."VisitasPost" ("idPost", "idUsuario", "idVisitaPost") VALUES (4, 1, 8);
+INSERT INTO public."VisitasPost" ("idPost", "idUsuario", "idVisitaPost") VALUES (4, 2, 9);
+INSERT INTO public."VisitasPost" ("idPost", "idUsuario", "idVisitaPost") VALUES (4, 3, 10);
+INSERT INTO public."VisitasPost" ("idPost", "idUsuario", "idVisitaPost") VALUES (4, 1001, 11);
+INSERT INTO public."VisitasPost" ("idPost", "idUsuario", "idVisitaPost") VALUES (4, 1002, 12);
+INSERT INTO public."VisitasPost" ("idPost", "idUsuario", "idVisitaPost") VALUES (2, 1002, 13);
+INSERT INTO public."VisitasPost" ("idPost", "idUsuario", "idVisitaPost") VALUES (2, 1004, 14);
+INSERT INTO public."VisitasPost" ("idPost", "idUsuario", "idVisitaPost") VALUES (2, 3, 15);
+INSERT INTO public."VisitasPost" ("idPost", "idUsuario", "idVisitaPost") VALUES (2, 1001, 16);
+INSERT INTO public."VisitasPost" ("idPost", "idUsuario", "idVisitaPost") VALUES (3, 1, 17);
+INSERT INTO public."VisitasPost" ("idPost", "idUsuario", "idVisitaPost") VALUES (3, 2, 18);
+INSERT INTO public."VisitasPost" ("idPost", "idUsuario", "idVisitaPost") VALUES (3, 1001, 19);
+INSERT INTO public."VisitasPost" ("idPost", "idUsuario", "idVisitaPost") VALUES (5, 3, 20);
+INSERT INTO public."VisitasPost" ("idPost", "idUsuario", "idVisitaPost") VALUES (5, 2, 21);
+
+
+--
+-- Data for Name: categorias; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO public.categorias ("idCategoria", "nombreCategoria") VALUES (1, 'Derecho');
+INSERT INTO public.categorias ("idCategoria", "nombreCategoria") VALUES (2, 'Educación');
+INSERT INTO public.categorias ("idCategoria", "nombreCategoria") VALUES (3, 'Ingeniería');
+INSERT INTO public.categorias ("idCategoria", "nombreCategoria") VALUES (4, 'Matemáticas');
+INSERT INTO public.categorias ("idCategoria", "nombreCategoria") VALUES (5, 'Papers');
+INSERT INTO public.categorias ("idCategoria", "nombreCategoria") VALUES (6, 'Desarrollo personal');
+INSERT INTO public.categorias ("idCategoria", "nombreCategoria") VALUES (7, 'Salud');
+
+
+--
+-- Data for Name: categoriasignadas; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO public.categoriasignadas ("idPost", "idCategoria") VALUES (1, 1);
+INSERT INTO public.categoriasignadas ("idPost", "idCategoria") VALUES (1, 5);
+INSERT INTO public.categoriasignadas ("idPost", "idCategoria") VALUES (3, 2);
+INSERT INTO public.categoriasignadas ("idPost", "idCategoria") VALUES (3, 4);
+INSERT INTO public.categoriasignadas ("idPost", "idCategoria") VALUES (3, 5);
+INSERT INTO public.categoriasignadas ("idPost", "idCategoria") VALUES (3, 1);
+INSERT INTO public.categoriasignadas ("idPost", "idCategoria") VALUES (4, 7);
+INSERT INTO public.categoriasignadas ("idPost", "idCategoria") VALUES (4, 5);
+INSERT INTO public.categoriasignadas ("idPost", "idCategoria") VALUES (4, 6);
+INSERT INTO public.categoriasignadas ("idPost", "idCategoria") VALUES (5, 2);
+INSERT INTO public.categoriasignadas ("idPost", "idCategoria") VALUES (2, 4);
+INSERT INTO public.categoriasignadas ("idPost", "idCategoria") VALUES (2, 5);
+
+
+--
 -- Data for Name: comentarios; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -1390,6 +1654,77 @@ INSERT INTO public.comentarios ("idComentario", "identificaciónUsuario", "idPub
 INSERT INTO public.comentarios ("idComentario", "identificaciónUsuario", "idPublicación", fecha, comentario) VALUES (13, 1, 51, '2020-12-20', 'Un comentario es una apreciación realizada por vía oral o escrita de algún objeto analizado, emitiendo en ello un juicio valorativo, lo que no es igual a una');
 INSERT INTO public.comentarios ("idComentario", "identificaciónUsuario", "idPublicación", fecha, comentario) VALUES (14, 3, 1, '2019-11-11', 'El comentario es un texto que tiene el propósito de presentar el texto comentado y explicarlo. En este sentido, el comentario de texto deb');
 INSERT INTO public.comentarios ("idComentario", "identificaciónUsuario", "idPublicación", fecha, comentario) VALUES (15, 1, 80, '2020-05-06', 'sinónimos de ''comentario'' en un diccionario de 200.000 sinónimos');
+
+
+--
+-- Data for Name: estado; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO public.estado ("idEstado", "idPost", "situación") VALUES (1, 1, 'Published');
+INSERT INTO public.estado ("idEstado", "idPost", "situación") VALUES (2, 2, 'en revisión');
+INSERT INTO public.estado ("idEstado", "idPost", "situación") VALUES (3, 3, 'Published');
+INSERT INTO public.estado ("idEstado", "idPost", "situación") VALUES (4, 4, 'Published');
+INSERT INTO public.estado ("idEstado", "idPost", "situación") VALUES (5, 5, 'en revisión');
+
+
+--
+-- Data for Name: etiquetas; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO public.etiquetas ("idEtiqueta", "nombreEtiqueta", "idUsuario") VALUES (1, 'diapositivas', 1);
+INSERT INTO public.etiquetas ("idEtiqueta", "nombreEtiqueta", "idUsuario") VALUES (2, 'Innovafest B10', 3);
+INSERT INTO public.etiquetas ("idEtiqueta", "nombreEtiqueta", "idUsuario") VALUES (3, 'Adultez', 2);
+INSERT INTO public.etiquetas ("idEtiqueta", "nombreEtiqueta", "idUsuario") VALUES (4, 'Matemáticas', 1004);
+INSERT INTO public.etiquetas ("idEtiqueta", "nombreEtiqueta", "idUsuario") VALUES (5, 'Teams', 1);
+INSERT INTO public.etiquetas ("idEtiqueta", "nombreEtiqueta", "idUsuario") VALUES (6, 'Covid-19', 1);
+INSERT INTO public.etiquetas ("idEtiqueta", "nombreEtiqueta", "idUsuario") VALUES (7, 'Maternidad', 1);
+
+
+--
+-- Data for Name: etiquetasignadas; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO public.etiquetasignadas ("idPost", "idEtiqueta") VALUES (1, 6);
+INSERT INTO public.etiquetasignadas ("idPost", "idEtiqueta") VALUES (2, 5);
+INSERT INTO public.etiquetasignadas ("idPost", "idEtiqueta") VALUES (1, 7);
+INSERT INTO public.etiquetasignadas ("idPost", "idEtiqueta") VALUES (3, 6);
+INSERT INTO public.etiquetasignadas ("idPost", "idEtiqueta") VALUES (3, 5);
+INSERT INTO public.etiquetasignadas ("idPost", "idEtiqueta") VALUES (3, 2);
+INSERT INTO public.etiquetasignadas ("idPost", "idEtiqueta") VALUES (3, 1);
+INSERT INTO public.etiquetasignadas ("idPost", "idEtiqueta") VALUES (4, 7);
+INSERT INTO public.etiquetasignadas ("idPost", "idEtiqueta") VALUES (4, 6);
+INSERT INTO public.etiquetasignadas ("idPost", "idEtiqueta") VALUES (4, 3);
+INSERT INTO public.etiquetasignadas ("idPost", "idEtiqueta") VALUES (5, 3);
+INSERT INTO public.etiquetasignadas ("idPost", "idEtiqueta") VALUES (2, 4);
+INSERT INTO public.etiquetasignadas ("idPost", "idEtiqueta") VALUES (2, 2);
+
+
+--
+-- Data for Name: post; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO public.post ("idPost", titulo, contenido, "fechaCreacion", "imgDest", "idUsuario") VALUES (2, 'Matemáticas para todos', 'https://www.youtube.com/channel/UCzTOSkrYaaHNYtGSYScqv9g', '2021-10-01', 'fgrt', 1);
+INSERT INTO public.post ("idPost", titulo, contenido, "fechaCreacion", "imgDest", "idUsuario") VALUES (3, 'Derechos durante la virtualidad', 'La pandemia a afectado a todos los sectores de la sociedad
+llevando a muchos a desarrollar sus actividades normales desde casa. pero hasta que punto pueden las empresas exiguir a los trabajadores desde el hogar?', '2021-05-02', 'por', 3);
+INSERT INTO public.post ("idPost", titulo, contenido, "fechaCreacion", "imgDest", "idUsuario") VALUES (4, 'Importancia del lavado de manos', 'Durante el retorno a la normalidad despues de la pandemia es importante seguir
+practicando los buenos habitos que dejo la misma uno de estos es el lavado de manos que permite evitar la propagacion de enfermedades', '2021-11-04', 'ewq', 1004);
+INSERT INTO public.post ("idPost", titulo, contenido, "fechaCreacion", "imgDest", "idUsuario") VALUES (5, 'Ideas ingenuas que tienen los adultos en relación a la adolescencia', 'La adolescencia es una etapa de la 
+vida llena de muchas dudas sobre el funcionamiento del mundo y el por qué de las cosas, lo que causa que se cuestionen muchas ordenes de los 
+adultos y que no se hacían en la niñez, añadiendo también el cambio físico que se produce en esta etapa y lo que trae consigo, ocasiona que 
+se estereotipe o se tengan ideas ingenuas en relación a la adolescencia por parte de la población adulta y que serán tocadas más adelante, 
+además de verificar cuál sería la verdad detrás de esas ideas.', '2020-06-09', 'jjjj', 1);
+INSERT INTO public.post ("idPost", titulo, contenido, "fechaCreacion", "imgDest", "idUsuario") VALUES (1, 'Dignidad humana de las personas privadas de la libertad.Derecho sin torturas. Parte II.', 'Los accionantes son personas que se encuentran privadas de la libertad y recluidas en la Cárcel de alta
+ y mediana seguridad de Valledupar ubicada en el departamento del Cesar. Relataron: “que dicho establecimiento penitenciario
+fue construido con una falla estructural que les impide contar con un suministro mínimo de agua para satisfacer 
+sus necesidades vitales. Solo reciben el líquido en periodos de 10 a 15 minutos diarios y, únicamente llega a los primeros pisos
+de las torres, entonces, para poder tener agua en las celdas de los pisos superiores, deben almacenarla en recipientes 
+improvisados y subirla, arriesgando muchas veces su integridad física.”', '2021-08-02', 'jjjj', 1);
+
+
+--
+-- Data for Name: publicacionesPost; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
 
 
 --
@@ -1620,11 +1955,75 @@ ALTER TABLE ONLY public."Usuarios"
 
 
 --
+-- Name: VisitasPost VisitasPost_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."VisitasPost"
+    ADD CONSTRAINT "VisitasPost_pkey" PRIMARY KEY ("idVisitaPost");
+
+
+--
+-- Name: categorias categorias_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.categorias
+    ADD CONSTRAINT categorias_pkey PRIMARY KEY ("idCategoria", "nombreCategoria");
+
+
+--
+-- Name: categoriasignadas categoriasasignadas_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.categoriasignadas
+    ADD CONSTRAINT categoriasasignadas_pkey PRIMARY KEY ("idPost", "idCategoria");
+
+
+--
 -- Name: comentarios comentarios_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.comentarios
     ADD CONSTRAINT comentarios_pkey PRIMARY KEY ("idComentario");
+
+
+--
+-- Name: estado estado_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.estado
+    ADD CONSTRAINT estado_pkey PRIMARY KEY ("idEstado");
+
+
+--
+-- Name: etiquetas etiquetas_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.etiquetas
+    ADD CONSTRAINT etiquetas_pkey PRIMARY KEY ("idEtiqueta");
+
+
+--
+-- Name: etiquetasignadas etiquetasignadas_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.etiquetasignadas
+    ADD CONSTRAINT etiquetasignadas_pkey PRIMARY KEY ("idPost", "idEtiqueta");
+
+
+--
+-- Name: post post_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.post
+    ADD CONSTRAINT post_pkey PRIMARY KEY ("idPost");
+
+
+--
+-- Name: publicacionesPost publicacionesPost_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."publicacionesPost"
+    ADD CONSTRAINT "publicacionesPost_pkey" PRIMARY KEY ("idPost", "idPublicación");
 
 
 --
@@ -1900,11 +2299,75 @@ ALTER TABLE ONLY public.comentarios
 
 
 --
+-- Name: post fkUsuario; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.post
+    ADD CONSTRAINT "fkUsuario" FOREIGN KEY ("idUsuario") REFERENCES public."Usuarios"("identificación") NOT VALID;
+
+
+--
+-- Name: etiquetas fkUsuario; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.etiquetas
+    ADD CONSTRAINT "fkUsuario" FOREIGN KEY ("idUsuario") REFERENCES public."Usuarios"("identificación") NOT VALID;
+
+
+--
 -- Name: InscripcionesEnCursos fkestado; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public."InscripcionesEnCursos"
     ADD CONSTRAINT fkestado FOREIGN KEY ("idEstadoDeInscripción") REFERENCES public."EstadosDeInscripción"("idEstadoInscripción") NOT VALID;
+
+
+--
+-- Name: etiquetasignadas fketiqueta; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.etiquetasignadas
+    ADD CONSTRAINT fketiqueta FOREIGN KEY ("idEtiqueta") REFERENCES public.etiquetas("idEtiqueta");
+
+
+--
+-- Name: estado fkpost; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.estado
+    ADD CONSTRAINT fkpost FOREIGN KEY ("idPost") REFERENCES public.post("idPost") NOT VALID;
+
+
+--
+-- Name: categoriasignadas fkpost; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.categoriasignadas
+    ADD CONSTRAINT fkpost FOREIGN KEY ("idPost") REFERENCES public.post("idPost") NOT VALID;
+
+
+--
+-- Name: VisitasPost fkpost; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."VisitasPost"
+    ADD CONSTRAINT fkpost FOREIGN KEY ("idPost") REFERENCES public.post("idPost") NOT VALID;
+
+
+--
+-- Name: etiquetasignadas fkpost; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.etiquetasignadas
+    ADD CONSTRAINT fkpost FOREIGN KEY ("idPost") REFERENCES public.post("idPost");
+
+
+--
+-- Name: VisitasPost fkusuario; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."VisitasPost"
+    ADD CONSTRAINT fkusuario FOREIGN KEY ("idUsuario") REFERENCES public."Usuarios"("identificación") NOT VALID;
 
 
 --

@@ -29,6 +29,71 @@ AND "Publicaciones"."identificaciónUsuario" IN(SELECT "Usuarios"."identificaci�
 																				WHERE nombre = 'Integrador')
 												AND "Estudiantes"."idPrograma" = 4);
 
+
+
+CREATE VIEW TipoDeLikeMasUsado AS
+SELECT "nombreTipoDeLike" AS "Tipo de like","Cantidad de usos" 
+FROM (SELECT "idTipoDeLike" AS "id tipo de like",COUNT(*) AS "Cantidad de usos",
+DENSE_RANK() OVER(ORDER BY COUNT(*) DESC) AS "Puesto"
+FROM "Likes"
+GROUP BY "idTipoDeLike"
+ORDER BY "Cantidad de usos" DESC) "CantidadTipoDeLike"
+INNER JOIN "TiposDeLike" ON "id tipo de like" = "idTipoDeLike"
+WHERE "Puesto" = 1;
+
+
+CREATE VIEW publicacioneRecientes 
+AS
+SELECT * FROM "Cursos"
+WHERE "fechaDePublicacion" BETWEEN (CAST(to_char(NOW(), 'YYYY-MM-DD') AS DATE)-7) 
+AND (CAST(to_char(NOW(), 'YYYY-MM-DD') AS DATE));
+
+
+
+create view datosinscripcion
+as
+select nombre, "fechaDeIngreso" ,"primerNombre","primerApellido" from "InscripcionesEnCursos"
+inner join "Usuarios"
+on "InscripcionesEnCursos"."identificaciónUsuario" = "Usuarios"."identificación"
+inner join "Cursos"
+on "Cursos"."idCurso" = "InscripcionesEnCursos"."idCurso"
+order by "fechaDeIngreso";
+
+
+create view datos_calculodiferencial
+as
+select "primerNombre","primerApellido"
+from"Usuarios"
+where"identificación"=(select "identificaciónUsuario"
+					  from "InscripcionesEnCursos"
+					  where "idCurso"=(select "idCurso"
+									  from "Cursos"
+									  where "idCurso"= 50));
+
+
+create view cursosfinalizados as
+select  count(*) "cantidad de estudiantes que termiaron un curso" from "InscripcionesEnCursos"
+inner join "EstadosDeInscripción"
+on "EstadosDeInscripción"."idEstadoInscripción" = "InscripcionesEnCursos"."idEstadoDeInscripción"
+where "idEstadoInscripción"=13;
+
+CREATE VIEW CursosDeIngenieria AS
+SELECT nombre AS "Curso", 
+"descripción" AS "Descripción", 
+"costo","certificado","nombreCategoríaCurso" AS "Categoría",
+"fechaDePublicacion" AS "Fecha de publicación"
+
+FROM "Cursos" INNER JOIN "CategoríasCursos"
+ON "Cursos"."idCategoríaCurso" = "CategoríasCursos"."idCategoríaCurso"
+
+WHERE "nombreCategoríaCurso" = 'ingenieria'
+
+
+
+
+
+
+
 CREATE OR REPLACE PROCEDURE 
 insertarGrupo(idGrupo Integer, nombreGrupo VARCHAR(100), descripción Text,idPrivacidad Integer,idUsuarioCreador Integer )
 AS
@@ -98,6 +163,9 @@ return nombreFacultad;
 END;
 $BODY$
 language 'plpgsql';
+
+
+
 
 
 
