@@ -38,6 +38,54 @@ $$;
 ALTER FUNCTION public.conexionesusuarios(idusuario integer) OWNER TO postgres;
 
 --
+-- Name: eliminarestudiante(integer); Type: PROCEDURE; Schema: public; Owner: postgres
+--
+
+CREATE PROCEDURE public.eliminarestudiante(identificacion integer)
+    LANGUAGE plpgsql
+    AS $$
+
+
+
+BEGIN
+RAISE NOTICE 'eliminando usuario';
+DELETE FROM "Usuarios" WHERE "identificación" = identificación;
+RAISE NOTICE 'eliminando estudiante';
+DELETE FROM "Estudiantes" WHERE "identificaciónUsuario" = identificación;
+
+
+
+END
+$$;
+
+
+ALTER PROCEDURE public.eliminarestudiante(identificacion integer) OWNER TO postgres;
+
+--
+-- Name: eliminarpost(integer); Type: PROCEDURE; Schema: public; Owner: postgres
+--
+
+CREATE PROCEDURE public.eliminarpost(idpost integer)
+    LANGUAGE plpgsql
+    AS $$
+
+
+
+BEGIN
+RAISE NOTICE 'eliminando Post';
+DELETE FROM "Post" WHERE "idPost" = idPost;
+RAISE NOTICE 'eliminando EtiquetasAsignadas';
+DELETE FROM "EtiquetasAsignadas" WHERE "idPost" = idPost;
+
+
+
+END
+$$;
+
+
+ALTER PROCEDURE public.eliminarpost(idpost integer) OWNER TO postgres;
+
+--
 -- Name: facultad(integer); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -58,6 +106,50 @@ $$;
 
 
 ALTER FUNCTION public.facultad(idestudiante integer) OWNER TO postgres;
+
+--
+-- Name: insertarcurso(integer, character varying, character varying, integer, character varying, integer, integer, character varying, integer); Type: PROCEDURE; Schema: public; Owner: postgres
+--
+
+CREATE PROCEDURE public.insertarcurso("idCurso" integer, nombre character varying, "descripción" character varying, costo integer, certificado character varying, "idCategoríaCurso" integer, "identificaciónUsuario" integer, "fechaDeIngreso" character varying, "idEstadoDeInscripción" integer)
+    LANGUAGE plpgsql
+    AS $$
+
+
+
+BEGIN
+RAISE NOTICE 'Insertando cursos';
+INSERT INTO "Cursos" values ("idCurso",nombre ,"descripción",costo,certificado,"idCategoríaCurso" );
+insert into "InscripcionesEnCursos" values ("identificaciónUsuario" ,"fechaDeIngreso","idEstadoDeInscripción") ;
+
+END
+$$;
+
+
+ALTER PROCEDURE public.insertarcurso("idCurso" integer, nombre character varying, "descripción" character varying, costo integer, certificado character varying, "idCategoríaCurso" integer, "identificaciónUsuario" integer, "fechaDeIngreso" character varying, "idEstadoDeInscripción" integer) OWNER TO postgres;
+
+--
+-- Name: insertarcursocompleto(integer, character varying, character varying, integer, character varying, integer, integer, character varying, integer, character varying, character varying); Type: PROCEDURE; Schema: public; Owner: postgres
+--
+
+CREATE PROCEDURE public.insertarcursocompleto("idCurso" integer, nombre character varying, "descripción" character varying, costo integer, certificado character varying, "idCategoríaCurso" integer, "idSecciónCurso" integer, "nombreSecciónCurso" character varying, "idTema" integer, "nombreTemaCurso" character varying, url character varying)
+    LANGUAGE plpgsql
+    AS $$
+
+
+
+BEGIN
+RAISE NOTICE 'Insertando curso';
+INSERT INTO "Cursos" values ("idCurso",nombre ,"descripción",costo,certificado,"idCategoríaCurso");
+RAISE NOTICE 'Insertando secion ';
+INSERT INTO "Cursos" values ("idSecciónCurso" ,"nombreSecciónCurso");
+RAISE NOTICE 'Insertando tema ';
+INSERT INTO "TemasCursos" values ("idTema","nombreTemaCurso","descripción" ,url);
+END
+$$;
+
+
+ALTER PROCEDURE public.insertarcursocompleto("idCurso" integer, nombre character varying, "descripción" character varying, costo integer, certificado character varying, "idCategoríaCurso" integer, "idSecciónCurso" integer, "nombreSecciónCurso" character varying, "idTema" integer, "nombreTemaCurso" character varying, url character varying) OWNER TO postgres;
 
 --
 -- Name: insertarestudiante(integer, character varying, character varying, character varying, character varying, character varying, character varying, text, date, integer, integer, integer, integer, integer, integer); Type: PROCEDURE; Schema: public; Owner: postgres
@@ -119,6 +211,37 @@ $$;
 
 
 ALTER PROCEDURE public.insertargrupo(idgrupo integer, nombregrupo character varying, "descripción" text, idprivacidad integer, idusuariocreador integer) OWNER TO postgres;
+
+--
+-- Name: insertarpost(integer, character varying, character varying, date, text, integer, integer, character varying); Type: PROCEDURE; Schema: public; Owner: postgres
+--
+
+CREATE PROCEDURE public.insertarpost(idpost integer, titulo character varying, contenido character varying, fechacreacion date, imgdest text, idusuario integer, idetiqueta integer, nombreetiqueta character varying)
+    LANGUAGE plpgsql
+    AS $$
+
+
+
+BEGIN
+RAISE NOTICE 'Creando Post';
+
+INSERT INTO Post values(idPost, titulo, contenido, fechaCreacion, imgDest,idUsuario);
+
+
+
+RAISE NOTICE 'Insertando Etiqueta';
+
+INSERT INTO Etiquetas values(idEtiqueta, nombreEtiqueta,idUsuario);
+
+INSERT INTO etiquetasignadas values(idPost, idEtiqueta);
+
+
+
+END
+$$;
+
+
+ALTER PROCEDURE public.insertarpost(idpost integer, titulo character varying, contenido character varying, fechacreacion date, imgdest text, idusuario integer, idetiqueta integer, nombreetiqueta character varying) OWNER TO postgres;
 
 SET default_tablespace = '';
 
@@ -218,6 +341,59 @@ CREATE TABLE public."Dependencias" (
 ALTER TABLE public."Dependencias" OWNER TO postgres;
 
 --
+-- Name: categoriasignadas; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.categoriasignadas (
+    "idPost" integer NOT NULL,
+    "idCategoria" integer NOT NULL
+);
+
+
+ALTER TABLE public.categoriasignadas OWNER TO postgres;
+
+--
+-- Name: Estadisticas de las Categorias.; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW public."Estadisticas de las Categorias." AS
+ SELECT categoriasignadas."idCategoria" AS "Número de Identificación de las Categorias",
+    count(categoriasignadas."idCategoria") AS "cantidad de usos de las Categorias"
+   FROM public.categoriasignadas
+  GROUP BY categoriasignadas."idCategoria"
+  ORDER BY categoriasignadas."idCategoria";
+
+
+ALTER TABLE public."Estadisticas de las Categorias." OWNER TO postgres;
+
+--
+-- Name: VisitasPost; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."VisitasPost" (
+    "idPost" integer NOT NULL,
+    "idUsuario" integer NOT NULL,
+    "idVisitaPost" integer NOT NULL
+);
+
+
+ALTER TABLE public."VisitasPost" OWNER TO postgres;
+
+--
+-- Name: Estadisticas del Post.; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW public."Estadisticas del Post." AS
+ SELECT "VisitasPost"."idPost" AS "Número de Identificación de los Post",
+    count("VisitasPost"."idPost") AS "cantidad de Visitas al Post"
+   FROM public."VisitasPost"
+  GROUP BY "VisitasPost"."idPost"
+  ORDER BY (count("VisitasPost"."idPost")) DESC;
+
+
+ALTER TABLE public."Estadisticas del Post." OWNER TO postgres;
+
+--
 -- Name: EstadosDeInscripción; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -308,6 +484,35 @@ CREATE VIEW public."Grupos Populares" AS
 
 
 ALTER TABLE public."Grupos Populares" OWNER TO postgres;
+
+--
+-- Name: post; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.post (
+    "idPost" integer NOT NULL,
+    titulo character varying(200) NOT NULL,
+    contenido text NOT NULL,
+    "fechaCreacion" date NOT NULL,
+    "imgDest" text NOT NULL,
+    "idUsuario" integer NOT NULL
+);
+
+
+ALTER TABLE public.post OWNER TO postgres;
+
+--
+-- Name: Información de los Post.; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW public."Información de los Post." AS
+ SELECT post."fechaCreacion" AS "Fecha de creación",
+    post.titulo AS "Título del Post",
+    post.contenido AS "Contenido del Post"
+   FROM public.post;
+
+
+ALTER TABLE public."Información de los Post." OWNER TO postgres;
 
 --
 -- Name: InscripcionesEnCursos; Type: TABLE; Schema: public; Owner: postgres
@@ -520,19 +725,6 @@ CREATE TABLE public."TiposDeUsuarios" (
 ALTER TABLE public."TiposDeUsuarios" OWNER TO postgres;
 
 --
--- Name: VisitasPost; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."VisitasPost" (
-    "idPost" integer NOT NULL,
-    "idUsuario" integer NOT NULL,
-    "idVisitaPost" integer NOT NULL
-);
-
-
-ALTER TABLE public."VisitasPost" OWNER TO postgres;
-
---
 -- Name: categorias; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -543,18 +735,6 @@ CREATE TABLE public.categorias (
 
 
 ALTER TABLE public.categorias OWNER TO postgres;
-
---
--- Name: categoriasignadas; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.categoriasignadas (
-    "idPost" integer NOT NULL,
-    "idCategoria" integer NOT NULL
-);
-
-
-ALTER TABLE public.categoriasignadas OWNER TO postgres;
 
 --
 -- Name: comentarios; Type: TABLE; Schema: public; Owner: postgres
@@ -688,22 +868,6 @@ CREATE VIEW public.innovadores AS
 
 
 ALTER TABLE public.innovadores OWNER TO postgres;
-
---
--- Name: post; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.post (
-    "idPost" integer NOT NULL,
-    titulo character varying(200) NOT NULL,
-    contenido text NOT NULL,
-    "fechaCreacion" date NOT NULL,
-    "imgDest" text NOT NULL,
-    "idUsuario" integer NOT NULL
-);
-
-
-ALTER TABLE public.post OWNER TO postgres;
 
 --
 -- Name: publicacionerecientes; Type: VIEW; Schema: public; Owner: postgres

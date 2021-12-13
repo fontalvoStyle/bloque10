@@ -86,7 +86,31 @@ SELECT nombre AS "Curso",
 FROM "Cursos" INNER JOIN "CategoríasCursos"
 ON "Cursos"."idCategoríaCurso" = "CategoríasCursos"."idCategoríaCurso"
 
-WHERE "nombreCategoríaCurso" = 'ingenieria'
+WHERE "nombreCategoríaCurso" = 'ingenieria';
+
+
+
+CREATE VIEW "Estadisticas del Post." as
+SELECT "idPost" as "Número de Identificación de los Post",
+COUNT("idPost") AS "cantidad de Visitas al Post"
+FROM "VisitasPost"
+GROUP BY "idPost"
+ORDER BY "cantidad de Visitas al Post" DESC;
+
+
+CREATE VIEW "Información de los Post." as
+SELECT "post"."fechaCreacion" AS "Fecha de creación",
+"post"."titulo" as "Título del Post",
+"post"."contenido" AS "Contenido del Post"
+from "post";
+
+CREATE VIEW "Estadisticas de las Categorias." as
+SELECT "idCategoria" as "Número de Identificación de las Categorias",
+COUNT("idCategoria") AS "cantidad de usos de las Categorias"
+FROM categoriasignadas
+GROUP BY "idCategoria"
+ORDER BY "Número de Identificación de las Categorias" ASC;
+
 
 
 
@@ -184,6 +208,144 @@ RAISE NOTICE 'Estudiante insertado con éxito';
 END
 $code$
 Language 'plpgsql';
+
+
+
+CREATE OR REPLACE PROCEDURE
+insertarcurso("idCurso" integer,nombre varchar(30),"descripción" varchar(100),costo integer,certificado varchar (2),
+"idCategoríaCurso" integer,"identificaciónUsuario" INTEGER,"fechaDeIngreso" VARCHAR(10),"idEstadoDeInscripción" INTEGER)
+AS
+$code$
+
+
+
+BEGIN
+RAISE NOTICE 'Insertando cursos';
+INSERT INTO "Cursos" values ("idCurso",nombre ,"descripción",costo,certificado,"idCategoríaCurso" );
+insert into "InscripcionesEnCursos" values ("identificaciónUsuario" ,"fechaDeIngreso","idEstadoDeInscripción") ;
+
+END
+$code$
+Language 'plpgsql';
+
+
+
+
+CREATE OR REPLACE PROCEDURE
+insertarcursocompleto("idCurso" integer,nombre varchar(30),"descripción" varchar(50),costo integer,certificado varchar (3),"idCategoríaCurso" integer,
+"idSecciónCurso" integer,"nombreSecciónCurso" varchar (10),
+"idTema" integer,"nombreTemaCurso" varchar(15),url varchar(100))
+AS
+$code$
+
+
+
+BEGIN
+RAISE NOTICE 'Insertando curso';
+INSERT INTO "Cursos" values ("idCurso",nombre ,"descripción",costo,certificado,"idCategoríaCurso");
+RAISE NOTICE 'Insertando secion ';
+INSERT INTO "Cursos" values ("idSecciónCurso" ,"nombreSecciónCurso");
+RAISE NOTICE 'Insertando tema ';
+INSERT INTO "TemasCursos" values ("idTema","nombreTemaCurso","descripción" ,url);
+END
+$code$
+Language 'plpgsql';
+
+
+
+
+CREATE OR REPLACE PROCEDURE
+insertarPost(idPost INTEGER,titulo character varying(200),
+contenido character varying(10000),fechaCreacion date,imgDest text,idUsuario integer,
+idEtiqueta integer,nombreEtiqueta character varying(25))
+AS
+$code$
+
+
+
+BEGIN
+RAISE NOTICE 'Creando Post';
+
+INSERT INTO Post values(idPost, titulo, contenido, fechaCreacion, imgDest,idUsuario);
+
+
+
+RAISE NOTICE 'Insertando Etiqueta';
+
+INSERT INTO Etiquetas values(idEtiqueta, nombreEtiqueta,idUsuario);
+
+INSERT INTO etiquetasignadas values(idPost, idEtiqueta);
+
+
+
+END
+$code$
+Language 'plpgsql';
+
+
+
+BEGIN
+RAISE NOTICE 'Creando Post';
+
+INSERT INTO "Post" values("idPost", titulo, contenido, "fechaCreacion", "imgDest",
+"numVisitas","idUsuario","idCategoria");
+
+
+
+RAISE NOTICE 'Insertando Etiqueta';
+
+INSERT INTO "Etiquetas" values(idEtiqueta, nombreEtiqueta,idUsuario);
+
+
+
+INSERT INTO "EtiquetasAsignadas" values(idPost, idEtiqueta);
+
+
+
+END
+$code$
+Language 'plpgsql';
+
+
+CREATE OR REPLACE PROCEDURE
+EliminarEstudiante(identificacion INTEGER)
+AS
+$code$
+
+
+
+BEGIN
+RAISE NOTICE 'eliminando usuario';
+DELETE FROM "Usuarios" WHERE "identificación" = identificación;
+RAISE NOTICE 'eliminando estudiante';
+DELETE FROM "Estudiantes" WHERE "identificaciónUsuario" = identificación;
+
+
+
+END
+$code$
+Language 'plpgsql';
+
+
+CREATE OR REPLACE PROCEDURE
+EliminarPost(idPost INTEGER)
+AS
+$code$
+
+
+
+BEGIN
+RAISE NOTICE 'eliminando Post';
+DELETE FROM "Post" WHERE "idPost" = idPost;
+RAISE NOTICE 'eliminando EtiquetasAsignadas';
+DELETE FROM "EtiquetasAsignadas" WHERE "idPost" = idPost;
+
+
+
+END
+$code$
+Language 'plpgsql';
+
 
 
 
