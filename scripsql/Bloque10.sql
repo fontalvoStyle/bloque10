@@ -60,6 +60,28 @@ $$;
 ALTER FUNCTION public.facultad(idestudiante integer) OWNER TO postgres;
 
 --
+-- Name: insertarestudiante(integer, character varying, character varying, character varying, character varying, character varying, character varying, text, date, integer, integer, integer, integer, integer, integer); Type: PROCEDURE; Schema: public; Owner: postgres
+--
+
+CREATE PROCEDURE public.insertarestudiante(identificacion integer, primernombre character varying, segundonombre character varying, primerapellido character varying, segundoapellido character varying, email character varying, contra character varying, biografia text, fechaderegistro date, idpais integer, idtipodeusuario integer, idnivel integer, idfotodeperfil integer, idfotodeportada integer, idprograma integer)
+    LANGUAGE plpgsql
+    AS $$
+
+BEGIN
+RAISE NOTICE 'Insertando usuario';
+INSERT INTO "Usuarios" VALUES(identificacion,primerNombre,segundoNombre,primerApellido,
+segundoApellido, email ,contra, biografia, fechaDeRegistro ,
+idPais , idTipoDeUsuario , idNivel ,idFotoDePerfil ,idFotoDePortada);
+RAISE NOTICE 'Insertando estudiante';
+INSERT INTO "Estudiantes" VALUES(identificacion,idPrograma);
+RAISE NOTICE 'Estudiante insertado con éxito';
+END
+$$;
+
+
+ALTER PROCEDURE public.insertarestudiante(identificacion integer, primernombre character varying, segundonombre character varying, primerapellido character varying, segundoapellido character varying, email character varying, contra character varying, biografia text, fechaderegistro date, idpais integer, idtipodeusuario integer, idnivel integer, idfotodeperfil integer, idfotodeportada integer, idprograma integer) OWNER TO postgres;
+
+--
 -- Name: insertargrupo(integer, character varying, text, integer, integer); Type: PROCEDURE; Schema: public; Owner: postgres
 --
 

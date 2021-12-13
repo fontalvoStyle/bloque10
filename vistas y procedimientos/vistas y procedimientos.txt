@@ -165,6 +165,27 @@ $BODY$
 language 'plpgsql';
 
 
+CREATE OR REPLACE PROCEDURE
+insertarEstudiante(identificacion INTEGER,primerNombre varchar(30),segundoNombre varchar(30),primerApellido varchar(30),
+segundoApellido varchar(30), email varchar(100),contra varchar(100), biografia text, fechaDeRegistro DATE,
+idPais INTEGER, idTipoDeUsuario INTEGER, idNivel INTEGER,idFotoDePerfil INTEGER,idFotoDePortada INTEGER,
+idPrograma INTEGER)
+AS
+$code$
+
+BEGIN
+RAISE NOTICE 'Insertando usuario';
+INSERT INTO "Usuarios" VALUES(identificacion,primerNombre,segundoNombre,primerApellido,
+segundoApellido, email ,contra, biografia, fechaDeRegistro ,
+idPais , idTipoDeUsuario , idNivel ,idFotoDePerfil ,idFotoDePortada);
+RAISE NOTICE 'Insertando estudiante';
+INSERT INTO "Estudiantes" VALUES(identificacion,idPrograma);
+RAISE NOTICE 'Estudiante insertado con éxito';
+END
+$code$
+Language 'plpgsql';
+
+
 
 
 
