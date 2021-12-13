@@ -17,6 +17,25 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
+-- Name: busquedacomentario(date); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.busquedacomentario(fecha1 date) RETURNS character varying
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+coment varchar(100);
+BEGIN
+coment:= (SELECT "comentario" FROM "comentarios"
+WHERE "fecha" = "fecha1");
+return coment;
+END;
+$$;
+
+
+ALTER FUNCTION public.busquedacomentario(fecha1 date) OWNER TO postgres;
+
+--
 -- Name: conexionesusuarios(integer); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -242,6 +261,48 @@ $$;
 
 
 ALTER PROCEDURE public.insertarpost(idpost integer, titulo character varying, contenido character varying, fechacreacion date, imgdest text, idusuario integer, idetiqueta integer, nombreetiqueta character varying) OWNER TO postgres;
+
+--
+-- Name: likespublicaciones(integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.likespublicaciones(idpublicacion1 integer) RETURNS bigint
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+numLikes bigint;
+BEGIN
+numLikes:= (SELECT COUNT(*)
+FROM "Likes"
+WHERE "idPublicación" = idPublicacion1
+GROUP BY "idPublicación");
+return numLikes;
+END;
+$$;
+
+
+ALTER FUNCTION public.likespublicaciones(idpublicacion1 integer) OWNER TO postgres;
+
+--
+-- Name: seccionc(integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.seccionc(idtema integer) RETURNS character varying
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+secciontem varchar(100);
+BEGIN
+secciontem:= (SELECT "nombreSecciónCurso" FROM
+"SeccionesCursos"
+WHERE "idSecciónCurso" = (SELECT "idSección" FROM "TemasCursos" WHERE "idTema" = idTema));
+
+return secciontem;
+END;
+$$;
+
+
+ALTER FUNCTION public.seccionc(idtema integer) OWNER TO postgres;
 
 SET default_tablespace = '';
 

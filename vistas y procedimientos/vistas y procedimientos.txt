@@ -347,6 +347,57 @@ $code$
 Language 'plpgsql';
 
 
+CREATE OR REPLACE FUNCTION likesPublicaciones(idPublicacion1 INTEGER)
+RETURNS bigint
+AS
+$BODY$
+DECLARE
+numLikes bigint;
+BEGIN
+numLikes:= (SELECT COUNT(*)
+FROM "Likes"
+WHERE "idPublicación" = idPublicacion1
+GROUP BY "idPublicación");
+return numLikes;
+END;
+$BODY$
+language 'plpgsql';
+
+CREATE OR REPLACE FUNCTION SeccionC(idTema INTEGER)
+RETURNS varchar(100)
+AS
+$BODY$
+DECLARE
+secciontem varchar(100);
+BEGIN
+secciontem:= (SELECT "nombreSecciónCurso" FROM
+"SeccionesCursos"
+WHERE "idSecciónCurso" = (SELECT "idSección" FROM "TemasCursos" WHERE "idTema" = idTema));
+
+return secciontem;
+END;
+$BODY$
+language 'plpgsql';
+
+
+
+
+
+CREATE OR REPLACE FUNCTION busquedacomentario(fecha1 DATE)
+RETURNS varchar(100)
+AS
+$BODY$
+DECLARE
+coment varchar(100);
+BEGIN
+coment:= (SELECT "comentario" FROM "comentarios"
+WHERE "fecha" = "fecha1");
+return coment;
+END;
+$BODY$
+language 'plpgsql';
+
+
 
 
 
